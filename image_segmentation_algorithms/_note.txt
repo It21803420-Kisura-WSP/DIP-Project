@@ -1,0 +1,2 @@
+All the Algorithms were written inside the Jupyter Notebook
+To make it work and show the output provided within those images, we must use Python GUI
