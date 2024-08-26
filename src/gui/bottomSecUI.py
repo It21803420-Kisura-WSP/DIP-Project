@@ -8,7 +8,7 @@ from tkinter import messagebox
 def clear_frame4(frame):
     for widget in frame.winfo_children():
         widget.destroy()
-
+ 
 def rotView(f4):
     clear_frame4(f4)
 

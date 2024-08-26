@@ -16,7 +16,7 @@ def upload_image(mainCanvas):
             print("Image uploaded successfully")
         else:
             print("Failed to load the image")
-
+ 
 def resize_image(image, max_width, max_height):
     height, width = image.shape[:2]
     scaling_factor = min(max_width / width, max_height / height)

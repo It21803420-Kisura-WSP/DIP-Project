@@ -30,7 +30,7 @@ def createUI(root):
     mainCanvas = tk.Canvas(f2, bg='white', height=600, width=600)
     mainCanvas.grid(row=0, column=0, sticky='nsew')
     f2.grid_rowconfigure(0, weight=1)
-    f2.grid_columnconfigure(0, weight=1)
+    f2.grid_columnconfigure(0, weight=1) 
 
     uploadBtn = tk.Button(f1, text='Upload an image', font=('Arial', 8), relief='flat', highlightthickness=0, command=lambda:upload_image(mainCanvas),height=2,width=25)
     uploadBtn.grid(row=0, column=0, sticky='n', pady=10,padx=10)
