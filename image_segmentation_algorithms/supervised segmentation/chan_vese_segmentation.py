@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage.color import rgb2gray
 from skimage.segmentation import chan_vese
+
 fig, axes = plt.subplots(1, 3, figsize=(10, 10))
 
 image = Image.open("image.png").convert("RGB")
