@@ -119,8 +119,53 @@ def colorChangeView(f4):
     f4.grid_columnconfigure(2, minsize=20)
 
 
-def tonalAdjView(f4):
+# def tonalAdjView(f4):
+#     clear_frame4(f4)
+
+
+def imgSegView(f4):
     clear_frame4(f4)
+
+    l1 = tk.Label(f4, text="Supervised Segmentation", font=('Arial', 8), width=60, height=2,fg ='#063361')
+    l1.grid(row=0, column=0, sticky='w')
+    f4.grid_columnconfigure(0, minsize=50)
+
+    l2 = tk.Label(f4, text="Unsupervised Segmentation", font=('Arial', 8), width=60, height=2,fg ='#063361')
+    l2.grid(row=0, column=1, sticky='w',padx=50)
+    f4.grid_columnconfigure(1, minsize=50)
+
+    acsBtn = tk.Button(f4, text="Active Contour Segmentation", )
+    acsBtn.grid(row=1, column=0, sticky='w',padx=20,pady=20)
+    f4.grid_rowconfigure(1, minsize=20)
+
+    cvsBtn = tk.Button(f4, text="Chan vese Segmentation", )
+    cvsBtn.grid(row=2, column=0, sticky='w',padx=20,pady=20)
+    f4.grid_rowconfigure(2, minsize=20)
+
+    sbtmiBtn = tk.Button(f4, text="Segmentation By Threshold manual input", )
+    sbtmiBtn.grid(row=1, column=0, sticky='w',padx=200,pady=20)
+    f4.grid_rowconfigure(1, minsize=20)
+
+    sbtusmBtn = tk.Button(f4, text="Segmentation By Threshold using skimagefilter module" )
+    sbtusmBtn.grid(row=2, column=0, sticky='w',padx=200,pady=20)
+    f4.grid_columnconfigure(2, minsize=20)
+
+    fsBtn = tk.Button(f4, text="Felzenszwalbs Segmentation" )
+    fsBtn.grid(row=1, column=1, sticky='w',padx=20,pady=20)
+    f4.grid_columnconfigure(1, minsize=20)
+
+    mbBtn = tk.Button(f4, text="Mark Boundaries" )
+    mbBtn.grid(row=1, column=1, sticky='w',padx=200,pady=20)
+    f4.grid_columnconfigure(1, minsize=20)
+
+    slicBtn = tk.Button(f4, text="Simple Linear Iterative Clustering" )
+    slicBtn.grid(row=2, column=1, sticky='w',padx=20,pady=20)
+    f4.grid_columnconfigure(0, minsize=20)
+
+
+
+
+
 
 
 

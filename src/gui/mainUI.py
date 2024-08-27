@@ -66,7 +66,7 @@ def createUI(root):
     colorChangeBtn.grid(row=6, column=0, sticky='n')
     f1.grid_rowconfigure(6, minsize=20)
 
-    tonalBtn = tk.Button(f1, text='Tonal Adjustments', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1,command=lambda:tonalAdjView(f4))
+    tonalBtn = tk.Button(f1, text='Tonal Adjustments', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1)
     tonalBtn.grid(row=7, column=0, sticky='n')
     f1.grid_rowconfigure(7, minsize=20)
 
@@ -100,7 +100,7 @@ def createUI(root):
     f1.grid_rowconfigure(13, minsize=50)
 
 
-    imgSegmentBtn = tk.Button(f1, text='Image Segmentation', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1)
+    imgSegmentBtn = tk.Button(f1, text='Image Segmentation', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1,command=lambda:imgSegView(f4))
     imgSegmentBtn.grid(row=14, column=0, sticky='n')
     f1.grid_rowconfigure(14, minsize=20)
 
