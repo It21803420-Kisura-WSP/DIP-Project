@@ -2,7 +2,6 @@ import tkinter as tk
 from src.gui.mainUI import createUI
 
 def main():
-    print("hallo")
     root = tk.Tk()
 
     screen_width = root.winfo_screenwidth() - 320

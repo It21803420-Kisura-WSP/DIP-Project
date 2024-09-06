@@ -1,6 +1,8 @@
 import tkinter as tk
 from src.gui.bottomSecUI import *
 from src.util.fileUtil import upload_image
+from src.functions.image_filters.edge_detection import edge_detection
+
 f3 = None
 EditedImgCanvas = None
 
@@ -100,7 +102,7 @@ def createUI(root):
     smoothFilterBtn.grid(row=11, column=0, sticky='n')
     f1.grid_rowconfigure(11, minsize=20)
 
-    EdgeFilterBtn = tk.Button(f1, text='Edge Detection', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1)
+    EdgeFilterBtn = tk.Button(f1, text='Edge Detection', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1,command=lambda:edge_detection())
     EdgeFilterBtn.grid(row=12, column=0, sticky='n')
     f1.grid_rowconfigure(12, minsize=20)
 

@@ -15,7 +15,7 @@ def rotate():
 
     resized_img = get_resized_image()
     if resized_img is None:
-        print("No image loaded for rotation")
+        print("No image loaded")
         return
     (h, w) = resized_img.shape[:2]
     center = (w // 2, h // 2)
@@ -39,13 +39,11 @@ def rotate():
     finalImg = Image.fromarray(rotated_image)
     finalfinalImg = ImageTk.PhotoImage(finalImg)
 
-     # Clear previous image in f3
     for widget in EditedImgCanvas.winfo_children():
         widget.destroy()
 
-    # Create and display new image
     img_label = tk.Label(EditedImgCanvas, image=finalfinalImg)
-    img_label.image = finalfinalImg  # Keep a reference to prevent garbage collection
+    img_label.image = finalfinalImg
     img_label.pack()
 
 
