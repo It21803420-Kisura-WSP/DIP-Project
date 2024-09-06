@@ -3,6 +3,9 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import cv2 as cv
 from tkinter import messagebox
+from src.util.fileUtil import resized_img
+from src.functions.basic_functions.rotate import rotate
+
 
 # Destroy all widgets in the frame
 def clear_frame4(frame):
@@ -25,7 +28,7 @@ def rotView(f4):
     radio2.grid(row=1, column=0, sticky='w',padx=20,pady=10)
     f4.grid_rowconfigure(1, minsize=20)
 
-    Deg90btn = tk.Button(f4, text='90°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10)
+    Deg90btn = tk.Button(f4, text='90°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:rotate(resized_img))
     Deg90btn.grid(row=0, column=1, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(1, minsize=20)
 

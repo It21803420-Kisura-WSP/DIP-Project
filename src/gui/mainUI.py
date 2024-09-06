@@ -26,6 +26,7 @@ def createUI(root):
     f3.grid(row=0, column=2, sticky='nsew', padx=10, pady=10)
     f4.grid(row=1, column=1, sticky='nsew', columnspan=2, padx=10, pady=10)
 
+    
 
     mainCanvas = tk.Canvas(f2, bg='white', height=600, width=600)
     mainCanvas.grid(row=0, column=0, sticky='nsew')
@@ -112,4 +113,7 @@ def createUI(root):
     styleTranBtn.grid(row=16, column=0, sticky='n')
     f1.grid_rowconfigure(16, minsize=20)
 
+
+    def send_f3_variable():
+        return f3
 

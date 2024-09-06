@@ -3,6 +3,8 @@ from tkinter import filedialog
 import cv2 as cv
 from PIL import Image, ImageTk
 
+resized_img = None
+
 # Function to upload image, now takes f2 as a parameter
 def upload_image(mainCanvas):
     global image_on_canvas
@@ -11,8 +13,8 @@ def upload_image(mainCanvas):
         image = cv.imread(file_path)
         if image is not None:
             max_width, max_height = 600, 600 
-            resized_image = resize_image(image, max_width, max_height)
-            display_image(resized_image,mainCanvas)
+            resized_img = resize_image(image, max_width, max_height)
+            display_image(resized_img,mainCanvas)
             print("Image uploaded successfully")
         else:
             print("Failed to load the image")
@@ -22,8 +24,9 @@ def resize_image(image, max_width, max_height):
     scaling_factor = min(max_width / width, max_height / height)
     new_width = int(width * scaling_factor)
     new_height = int(height * scaling_factor)
-    resized_image = cv.resize(image, (new_width, new_height), interpolation=cv.INTER_AREA)
-    return resized_image
+    
+    resized_img = cv.resize(image, (new_width, new_height), interpolation=cv.INTER_AREA)
+    return resized_img  
 
 def display_image(cv_image,mainCanvas):
     global image_on_canvas
@@ -37,3 +40,8 @@ def display_image(cv_image,mainCanvas):
 def cv2_to_tk_image(cv_image):
     image = Image.fromarray(cv_image)
     return ImageTk.PhotoImage(image)
+
+
+
+# def edited_img():
+
