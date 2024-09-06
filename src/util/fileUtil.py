@@ -5,8 +5,10 @@ from PIL import Image, ImageTk
 
 resized_img = None
 
+
 # Function to upload image, now takes f2 as a parameter
 def upload_image(mainCanvas):
+    global resized_img
     global image_on_canvas
     file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp")])
     if file_path:
@@ -18,15 +20,15 @@ def upload_image(mainCanvas):
             print("Image uploaded successfully")
         else:
             print("Failed to load the image")
- 
+
 def resize_image(image, max_width, max_height):
     height, width = image.shape[:2]
     scaling_factor = min(max_width / width, max_height / height)
     new_width = int(width * scaling_factor)
     new_height = int(height * scaling_factor)
-    
     resized_img = cv.resize(image, (new_width, new_height), interpolation=cv.INTER_AREA)
     return resized_img  
+
 
 def display_image(cv_image,mainCanvas):
     global image_on_canvas
@@ -41,7 +43,6 @@ def cv2_to_tk_image(cv_image):
     image = Image.fromarray(cv_image)
     return ImageTk.PhotoImage(image)
 
-
-
-# def edited_img():
-
+def get_resized_image():
+    global resized_img
+    return resized_img

@@ -1,10 +1,13 @@
 import tkinter as tk
 from src.gui.bottomSecUI import *
 from src.util.fileUtil import upload_image
+f3 = None
+EditedImgCanvas = None
 
 def createUI(root):
 
     # Grid setup
+    global f3
     f1 = tk.LabelFrame(root)
     f2 = tk.LabelFrame(root)
     f3 = tk.LabelFrame(root)
@@ -32,6 +35,13 @@ def createUI(root):
     mainCanvas.grid(row=0, column=0, sticky='nsew')
     f2.grid_rowconfigure(0, weight=1)
     f2.grid_columnconfigure(0, weight=1) 
+
+    global EditedImgCanvas
+
+    EditedImgCanvas = tk.Canvas(f3, bg='white', height=600, width=600)
+    EditedImgCanvas.grid(row=0, column=0, sticky='nsew')
+    f3.grid_rowconfigure(0, weight=1)
+    f3.grid_columnconfigure(0, weight=1) 
 
     uploadBtn = tk.Button(f1, text='Upload an image', font=('Arial', 8), relief='flat', highlightthickness=0, command=lambda:upload_image(mainCanvas),height=2,width=25)
     uploadBtn.grid(row=0, column=0, sticky='n', pady=10,padx=10)
@@ -113,7 +123,10 @@ def createUI(root):
     styleTranBtn.grid(row=16, column=0, sticky='n')
     f1.grid_rowconfigure(16, minsize=20)
 
+def get_f3():
+    global f3
+    return f3
 
-    def send_f3_variable():
-        return f3
-
+def get_EditedImgCanvas():
+    global EditedImgCanvas
+    return EditedImgCanvas
