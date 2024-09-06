@@ -2,7 +2,7 @@
 
 ## Work Load
 ### IT21803420 Waynath S.P.K
-- [ ] Advanced Requirements : Image Segmentation 
+- [X] Advanced Requirements : Image Segmentation 
 
 ### IT21284502 Ilangamveera M M
 - [ ] Basic Requirements
