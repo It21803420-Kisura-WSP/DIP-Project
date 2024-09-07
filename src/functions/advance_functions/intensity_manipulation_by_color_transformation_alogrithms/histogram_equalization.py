@@ -2,13 +2,13 @@ import cv2
 import numpy as np
 
 def histogram_equalization(image):
-    # Convert to YCrCb color space
+   
     ycrcb = cv2.cvtColor(image, cv2.COLOR_BGR2YCrCb)
 
-    # Apply histogram equalization on the Y channel (luminance)
+    
     ycrcb[:, :, 0] = cv2.equalizeHist(ycrcb[:, :, 0])
 
-    # Convert back to BGR color space
+    
     equalized_image = cv2.cvtColor(ycrcb, cv2.COLOR_YCrCb2BGR)
 
     return equalized_image

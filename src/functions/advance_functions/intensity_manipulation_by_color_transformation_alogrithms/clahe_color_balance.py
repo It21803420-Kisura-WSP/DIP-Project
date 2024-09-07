@@ -2,14 +2,14 @@ import cv2
 import numpy as np
 
 def clahe_color_balance(image):
-    # Convert to LAB color space
+    
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
 
-    # Apply CLAHE to the L (Lightness) channel
+   
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
     lab[:, :, 0] = clahe.apply(lab[:, :, 0])
 
-    # Convert back to BGR color space
+   
     clahe_image = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
 
     return clahe_image
