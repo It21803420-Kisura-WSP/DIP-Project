@@ -35,4 +35,3 @@ def enhance_contrast():
     img_label.image = final_img  # Keep reference to avoid garbage collection
     img_label.pack()
 
-# Example usage: enhance_contrast()

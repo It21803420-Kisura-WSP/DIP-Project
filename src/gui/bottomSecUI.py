@@ -7,7 +7,7 @@ from src.functions.basic_functions.rotate import rotate
 from src.functions.advance_functions.image_segmentation.supervised_segmentation import *
 from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.brightness_enhancement import enhance_brightness
 from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.contrast_enhancement import enhance_contrast
-# Destroy all widgets in the frame
+
 def clear_frame4(frame):
     for widget in frame.winfo_children():
         widget.destroy()

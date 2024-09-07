@@ -6,7 +6,6 @@ from PIL import Image, ImageTk
 resized_img = None
 
 
-# Function to upload image, now takes f2 as a parameter
 def upload_image(mainCanvas):
     global resized_img
     global image_on_canvas
