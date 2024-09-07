@@ -7,12 +7,12 @@ from src.util.fileUtil import get_resized_image
 
 
 def rotate():
-    from src.gui.mainUI import get_f3
+    # from src.gui.mainUI import get_f3
     from src.gui.mainUI import get_EditedImgCanvas
 
-    f3 = get_f3()
+    # f3 = get_f3()
     EditedImgCanvas = get_EditedImgCanvas()
-
+ok
     resized_img = get_resized_image()
     if resized_img is None:
         print("No image loaded")
@@ -32,8 +32,6 @@ def rotate():
     rotation_matrix[1, 2] += new_h / 2 - center[1]
 
     rotated_image = cv.warpAffine(resized_img, rotation_matrix, (new_w, new_h))
-
-    print('wada wada')
 
     rotated_image = cv.cvtColor(rotated_image, cv.COLOR_BGR2RGB)
     finalImg = Image.fromarray(rotated_image)

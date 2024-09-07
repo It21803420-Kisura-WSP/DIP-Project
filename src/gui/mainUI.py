@@ -1,7 +1,9 @@
 import tkinter as tk
 from src.gui.bottomSecUI import *
 from src.util.fileUtil import upload_image
-from src.functions.image_filters.edge_detection import edge_detection
+from src.functions.advance_functions.image_filters.sharpening import image_sharpening
+from src.functions.advance_functions.image_filters.smoothing import smoothing
+from src.functions.advance_functions.image_filters.edge_detection import edge_detection
 
 f3 = None
 EditedImgCanvas = None
@@ -94,11 +96,11 @@ def createUI(root):
     f1.grid_rowconfigure(9, minsize=50)
 
 
-    sharpFilterBtn = tk.Button(f1, text='Sharpening', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=10, height=1)
+    sharpFilterBtn = tk.Button(f1, text='Sharpening', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=10, height=1,command=lambda:image_sharpening())
     sharpFilterBtn.grid(row=10, column=0, sticky='n')
     f1.grid_rowconfigure(10, minsize=20)
 
-    smoothFilterBtn = tk.Button(f1, text='Smooth', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1)
+    smoothFilterBtn = tk.Button(f1, text='Smooth', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1,command=lambda:smoothing())
     smoothFilterBtn.grid(row=11, column=0, sticky='n')
     f1.grid_rowconfigure(11, minsize=20)
 
