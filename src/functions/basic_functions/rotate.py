@@ -12,7 +12,7 @@ def rotate():
 
     # f3 = get_f3()
     EditedImgCanvas = get_EditedImgCanvas()
-ok
+
     resized_img = get_resized_image()
     if resized_img is None:
         print("No image loaded")

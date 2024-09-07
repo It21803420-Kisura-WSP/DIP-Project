@@ -4,8 +4,7 @@ from PIL import Image, ImageTk
 import cv2 as cv
 from tkinter import messagebox
 from src.functions.basic_functions.rotate import rotate
-from src.functions.advance_functions.image_segmentation_algorithms.supervised_segmentation.active_contour_segmentation import activeConSeg
-
+from src.functions.advance_functions.image_segmentation.supervised_segmentation import active_contour
 # Destroy all widgets in the frame
 def clear_frame4(frame):
     for widget in frame.winfo_children():
@@ -136,7 +135,7 @@ def imgSegView(f4):
     l2.grid(row=0, column=1, sticky='w',padx=50)
     f4.grid_columnconfigure(1, minsize=50)
 
-    acsBtn = tk.Button(f4, text="Active Contour Segmentation", command=lambda:activeConSeg())
+    acsBtn = tk.Button(f4, text="Active Contour Segmentation", command=lambda:active_contour())
     acsBtn.grid(row=1, column=0, sticky='w',padx=20,pady=20)
     f4.grid_rowconfigure(1, minsize=20)
 
