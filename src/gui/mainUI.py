@@ -81,7 +81,7 @@ def createUI(root):
     colorChangeBtn.grid(row=6, column=0, sticky='n')
     f1.grid_rowconfigure(6, minsize=20)
 
-    tonalBtn = tk.Button(f1, text='Tonal Adjustments', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1)
+    tonalBtn = tk.Button(f1, text='Tonal Adjustments', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, width=20, height=1,command=lambda:intensityManipulation(f4))
     tonalBtn.grid(row=7, column=0, sticky='n')
     f1.grid_rowconfigure(7, minsize=20)
 

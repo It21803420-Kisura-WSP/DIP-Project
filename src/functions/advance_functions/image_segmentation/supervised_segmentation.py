@@ -1,16 +1,21 @@
 # supervised segmentation algorithms
 
 # Active Contour Imports
+import cv2 as cv
 import numpy as np
+import tkinter as tk
 import matplotlib.pyplot as plt
 from skimage.color import rgb2gray
 from skimage.filters import gaussian
 from skimage.segmentation import active_contour
 from PIL import Image
+from src.util.fileUtil import get_resized_image
+
 
 # Chan Vese Imports
 from PIL import Image
 import numpy as np
+from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
 from skimage.color import rgb2gray
 from skimage.segmentation import chan_vese
@@ -30,33 +35,58 @@ import numpy as np
 
 
 
-def active_contour(image_path : str):
-    image = Image.open(image_path).convert("RGB")
-    image_array = np.array(image)
-    gray_image = rgb2gray(image)
+def active_contour_segmentation():
+    from src.gui.mainUI import get_EditedImgCanvas
+    EditedImgCanvas = get_EditedImgCanvas()
 
-    # apply gaussian filter
+    resized_img = get_resized_image()
+    if resized_img is None:
+        print("No image loaded")
+        return
+    
+    image_array = np.array(resized_img)
+    gray_image = rgb2gray(resized_img)
+
+    # Apply gaussian filter
     gray_image_noiseless = gaussian(gray_image, 1)
 
-    # Localising the circle's center at 220, 110
-    x1 = 220 + 100*np.cos(np.linspace(0, 2*np.pi, 500))
-    x2 = 100 + 100*np.sin(np.linspace(0, 2*np.pi, 500))
+    # Localizing the circle's center (initial snake)
+    x1 = 220 + 100 * np.cos(np.linspace(0, 2 * np.pi, 500))
+    x2 = 100 + 100 * np.sin(np.linspace(0, 2 * np.pi, 500))
 
-    # Generating a circle based on x1, x2
+    # Generating a circle (initial snake) based on x1, x2
     snake = np.array([x1, x2]).T
 
-    # Computing the Active Contour for the given image
+    # Computing the Active Contour for the given image using active_contour() function
     image_snake = active_contour(gray_image_noiseless, snake)
 
-    fig = plt.figure(figsize=(10, 10))
+    # Create a figure and axes using Matplotlib
+    fig, ax = plt.subplots()
+    ax.imshow(gray_image_noiseless, cmap='gray')
 
-    ax = fig.add_subplot(111)
-    ax.imshow(gray_image_noiseless)
+    # Plot the initial snake (red dashed line)
+    ax.plot(snake[:, 0], snake[:, 1], '--r', lw=3)
 
-    # Plotting the face boundary marker
-    ax.plot(image_snake[:, 0], image_snake[:, 1], '-b', lw=5)
+    # Plot the active contour result (blue solid line)
+    ax.plot(image_snake[:, 0], image_snake[:, 1], '-b', lw=3)
 
-    ax.plot(snake[:, 0], snake[:, 1], '--r', lw=5)
+    # Save the Matplotlib figure to a temporary file
+    fig.savefig("active_contour_output.png")
+    plt.close(fig)
+
+    # Load the saved image as a PIL image
+    pil_image = Image.open("active_contour_output.png")
+    final_img = ImageTk.PhotoImage(pil_image)
+
+    # Clear the canvas before displaying the new image
+    for widget in EditedImgCanvas.winfo_children():
+        widget.destroy()
+
+    # Display the image in the Tkinter canvas
+    img_label = tk.Label(EditedImgCanvas, image=final_img)
+    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.pack()
+
 
 def chan_vese(image_path : str):
     fig, axes = plt.subplots(1, 3, figsize=(10, 10))
@@ -100,35 +130,42 @@ def threshold_manual_input(image_path : str):
         plt.imshow(binarized_gray, cmap = 'gray')
     plt.tight_layout()
 
-def threshold_using_skiimage_filter(image_path : str):
-    image = Image.open(image_path).convert("RGB")
-    image_array = np.array(image)
-    gray_image = rgb2gray(image)
+def threshold_using_skiimage_filter():
+    from src.gui.mainUI import get_EditedImgCanvas
+    EditedImgCanvas = get_EditedImgCanvas()
 
-    plt.figure(figsize=(15,15))
+    resized_img = get_resized_image()
+    if resized_img is None:
+        print("No image loaded")
+        return
+    
+    image_array = np.array(resized_img)
+    gray_image = rgb2gray(resized_img)
+
+    # Otsu Thresholding
     threshold = filters.threshold_otsu(gray_image)
-
-    binarized_image = (gray_image > threshold)*1
-    plt.subplot(2,2,1)
-    plt.title("Threshold: >"+str(threshold))
-    plt.imshow(binarized_image, cmap = "gray")
-
-    threshold = filters.threshold_niblack(gray_image)
+    binarized_image_otsu = (gray_image > threshold).astype(np.uint8) * 255  # Convert to 0-255
 
     # Niblack Thresholding
-    binarized_image = (gray_image > threshold)*1
-    plt.subplot(2,2,2)
-    plt.title("Niblack Thresholding")
-    plt.imshow(binarized_image, cmap = "gray")
+    threshold_niblack = filters.threshold_niblack(gray_image)
+    binarized_image_niblack = (gray_image > threshold_niblack).astype(np.uint8) * 255
 
     # Sauvola Thresholding
-    threshold = filters.threshold_sauvola(gray_image)
-    plt.subplot(2,2,3)
-    plt.title("Sauvola Thresholding")
-    plt.imshow(threshold, cmap = "gray")
+    threshold_sauvola = filters.threshold_sauvola(gray_image)
+    binarized_image_sauvola = (gray_image > threshold_sauvola).astype(np.uint8) * 255
 
-    # Sauvola Thresholding - Converting to 0's and 1's
-    binarized_image = (gray_image > threshold)*1
-    plt.subplot(2,2,4)
-    plt.title("Sauvola Thresholding - Converting to 0's and 1's")
-    plt.imshow(binarized_image, cmap = "gray")
+    # Combine the three images horizontally for display in Tkinter
+    combined_image = np.hstack((binarized_image_otsu, binarized_image_niblack, binarized_image_sauvola))
+
+    # Convert binary image to PIL Image and then to ImageTk for Tkinter
+    binarized_image_pil = Image.fromarray(combined_image)
+    final_img = ImageTk.PhotoImage(binarized_image_pil)
+
+    # Clear the canvas before displaying new image
+    for widget in EditedImgCanvas.winfo_children():
+        widget.destroy()
+
+    # Display the image in the Tkinter canvas
+    img_label = tk.Label(EditedImgCanvas, image=final_img)
+    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.pack()

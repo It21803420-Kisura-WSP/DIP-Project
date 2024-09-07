@@ -8,9 +8,8 @@ from src.util.fileUtil import get_resized_image
 
 def rotate():
     # from src.gui.mainUI import get_f3
-    from src.gui.mainUI import get_EditedImgCanvas
-
     # f3 = get_f3()
+    from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
 
     resized_img = get_resized_image()
