@@ -4,7 +4,9 @@ from PIL import Image, ImageTk
 import cv2 as cv
 from tkinter import messagebox
 from src.functions.basic_functions.rotate import rotate
-from src.functions.advance_functions.image_segmentation.supervised_segmentation import active_contour
+from src.functions.advance_functions.image_segmentation.supervised_segmentation import *
+from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.brightness_enhancement import enhance_brightness
+from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.contrast_enhancement import enhance_contrast
 # Destroy all widgets in the frame
 def clear_frame4(frame):
     for widget in frame.winfo_children():
@@ -120,10 +122,6 @@ def colorChangeView(f4):
     f4.grid_columnconfigure(2, minsize=20)
 
 
-# def tonalAdjView(f4):
-#     clear_frame4(f4)
-
-
 def imgSegView(f4):
     clear_frame4(f4)
 
@@ -135,7 +133,7 @@ def imgSegView(f4):
     l2.grid(row=0, column=1, sticky='w',padx=50)
     f4.grid_columnconfigure(1, minsize=50)
 
-    acsBtn = tk.Button(f4, text="Active Contour Segmentation", command=lambda:active_contour())
+    acsBtn = tk.Button(f4, text="Active Contour Segmentation", command=lambda:active_contour_segmentation())
     acsBtn.grid(row=1, column=0, sticky='w',padx=20,pady=20)
     f4.grid_rowconfigure(1, minsize=20)
 
@@ -147,7 +145,7 @@ def imgSegView(f4):
     sbtmiBtn.grid(row=1, column=0, sticky='w',padx=200,pady=20)
     f4.grid_rowconfigure(1, minsize=20)
 
-    sbtusmBtn = tk.Button(f4, text="Segmentation By Threshold using skimagefilter module" )
+    sbtusmBtn = tk.Button(f4, text="Segmentation By Threshold using skimagefilter module",command=lambda:threshold_using_skiimage_filter() )
     sbtusmBtn.grid(row=2, column=0, sticky='w',padx=200,pady=20)
     f4.grid_columnconfigure(2, minsize=20)
 
@@ -164,11 +162,17 @@ def imgSegView(f4):
     f4.grid_columnconfigure(0, minsize=20)
 
 
+def intensityManipulation(f4):
+    clear_frame4(f4)
 
+    briBtn = tk.Button(f4, text="Increase brigtness",command=lambda:enhance_brightness() )
+    briBtn.grid(row=0, column=0, sticky='w',padx=20,pady=20)
+    f4.grid_columnconfigure(0, minsize=20)
 
+    conBtn = tk.Button(f4, text="Increase Contrast",command=lambda:enhance_contrast())
+    conBtn.grid(row=0, column=1, sticky='w',padx=20,pady=20)
+    f4.grid_columnconfigure(1, minsize=20)
 
-
-
-
-
-    
+    bwBtn = tk.Button(f4, text="BW")
+    bwBtn.grid(row=0, column=2, sticky='w',padx=20,pady=20)
+    f4.grid_columnconfigure(2, minsize=20)
