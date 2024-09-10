@@ -1,24 +1,11 @@
 # un-supervised segmentation algorithms
 
-# Felzenszwalb’s Segmentation Imports
-from skimage.segmentation import felzenszwalb, mark_boundaries
+# Global Imports
+from skimage.segmentation import slic, mark_boundaries, felzenszwalb
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
 from skimage.color import label2rgb
-import numpy as np
-from PIL import Image
-import matplotlib.pyplot as plt
-
-# Mark Bounderies Imports
-from skimage.segmentation import slic, mark_boundaries
-from PIL import Image
-import numpy as np
-import matplotlib.pyplot as plt
-
-# Simple Linear Iterative Clustering Imports
-from skimage.segmentation import slic
-from skimage.color import label2rgb
-import numpy as np
-from PIL import Image
-import matplotlib.pyplot as plt
 
 def felzenszwalbs(image_path : str):
     image = Image.open(image_path).convert("RGB")

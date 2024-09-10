@@ -1,37 +1,16 @@
 # supervised segmentation algorithms
 
-# Active Contour Imports
+# Global Imports
 import cv2 as cv
-import numpy as np
 import tkinter as tk
-import matplotlib.pyplot as plt
-from skimage.color import rgb2gray
 from skimage.filters import gaussian
-from skimage.segmentation import active_contour
-from PIL import Image
 from src.util.fileUtil import get_resized_image
-
-
-# Chan Vese Imports
-from PIL import Image
-import numpy as np
 from PIL import Image, ImageTk
-import matplotlib.pyplot as plt
-from skimage.color import rgb2gray
-from skimage.segmentation import chan_vese
-
-# Segmentation by threshold Manual Input
-from skimage.color import rgb2gray
-import matplotlib.pyplot as plt
-from PIL import Image
 import numpy as np
-
-# Segmentation by Skiimage Filter
+import matplotlib.pyplot as plt
+from skimage.color import rgb2gray
+from skimage.segmentation import chan_vese, active_contour
 from skimage import filters
-from skimage.color import rgb2gray
-import matplotlib.pyplot as plt
-from PIL import Image
-import numpy as np
 
 
 
