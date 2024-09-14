@@ -143,6 +143,7 @@ def colorChangeView(f4):
 
 
 def imgSegView(f4):
+    # add edge detection codes here <- message to madhara
     clear_frame4(f4)
 
     l1 = tk.Label(f4, text="Supervised Segmentation", font=('Arial', 8), width=60, height=2,fg ='#063361')
