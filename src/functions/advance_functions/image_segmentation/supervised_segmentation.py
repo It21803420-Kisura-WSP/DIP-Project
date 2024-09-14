@@ -12,8 +12,6 @@ from skimage.color import rgb2gray
 from skimage.segmentation import chan_vese, active_contour
 from skimage import filters
 
-
-
 def active_contour_segmentation():
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
