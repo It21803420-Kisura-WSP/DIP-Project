@@ -22,8 +22,3 @@ def using_google_arbitary_image_stylization_model():
     stylized_image = model(tf.constant(content_image), tf.constant(style_image))[0]
 
     cv2.imwrite('stylized_image.jpg', cv2.cvtColor(np.squeeze(stylized_image)*255, cv2.COLOR_BGR2RGB))
-
-# Using VGG-19 model
-def using_vgg_19_model():
-    pass
-    # https://www.geeksforgeeks.org/neural-style-transfer-with-tensorflow/
