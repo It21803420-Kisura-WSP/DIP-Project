@@ -1,13 +1,12 @@
 # Style Transfer Algorithms
+import tensorflow_hub as hub
+import tensorflow as tf
+from matplotlib import pyplot as plt
+import numpy as np
+import cv2
 
 # use deep learning model (eg:- tensorflow)
 def using_google_arbitary_image_stylization_model():
-    import tensorflow_hub as hub
-    import tensorflow as tf
-    from matplotlib import pyplot as plt
-    import numpy as np
-    import cv2
-
     model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
 
     def load_image(img_path):
