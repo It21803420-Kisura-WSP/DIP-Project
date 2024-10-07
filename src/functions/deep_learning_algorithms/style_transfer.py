@@ -1,12 +1,10 @@
 # Style Transfer Algorithms
 import tensorflow_hub as hub
 import tensorflow as tf
-from matplotlib import pyplot as plt
 import numpy as np
 import cv2
 
-# use deep learning model (eg:- tensorflow)
-def using_google_arbitary_image_stylization_model():
+def using_google_arbitary_image_stylization_model(content : str, style : str):
     model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
 
     def load_image(img_path):
@@ -16,9 +14,9 @@ def using_google_arbitary_image_stylization_model():
         img = img[tf.newaxis, :]
         return img
 
-    content_image = load_image('image.png')
-    style_image = load_image('image2.jpg')
+    content_image = load_image(content)
+    style_image = load_image(style)
 
     stylized_image = model(tf.constant(content_image), tf.constant(style_image))[0]
 
-    cv2.imwrite('stylized_image.jpg', cv2.cvtColor(np.squeeze(stylized_image)*255, cv2.COLOR_BGR2RGB))
+    cv2.imwrite('styled_image.jpg', cv2.cvtColor(np.squeeze(stylized_image)*255, cv2.COLOR_BGR2RGB))
