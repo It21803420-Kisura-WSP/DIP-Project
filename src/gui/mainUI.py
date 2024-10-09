@@ -12,10 +12,10 @@ def createUI(root):
 
     # Grid setup
     global f3
-    f1 = tk.LabelFrame(root)
-    f2 = tk.LabelFrame(root)
-    f3 = tk.LabelFrame(root)
-    f4 = tk.LabelFrame(root)
+    f1 = tk.LabelFrame(root, bg='white')
+    f2 = tk.LabelFrame(root, bg='white')
+    f3 = tk.LabelFrame(root, bg='white')
+    f4 = tk.LabelFrame(root, bg='white')
 
     f1.grid_propagate(False)
     f2.grid_propagate(False)
@@ -33,7 +33,7 @@ def createUI(root):
     f3.grid(row=0, column=2, sticky='nsew', padx=10, pady=10)
     f4.grid(row=1, column=1, sticky='nsew', columnspan=2, padx=10, pady=10)
 
-    
+
 
     mainCanvas = tk.Canvas(f2, bg='white', height=600, width=600)
     mainCanvas.grid(row=0, column=0, sticky='nsew')
