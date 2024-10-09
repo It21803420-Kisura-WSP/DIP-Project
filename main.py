@@ -8,7 +8,7 @@ def main():
     screen_height = root.winfo_screenheight() - 160
 
     root.geometry(f"{screen_width}x{screen_height}")
-    root.title("ABC Image Editor")
+    root.title("Image Maker Pro")
 
     createUI(root)
     root.mainloop()

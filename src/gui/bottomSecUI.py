@@ -3,7 +3,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import cv2 as cv
 from tkinter import messagebox
-from src.functions.basic_functions.rotate import rotate
+from src.functions.basic_functions.rotate import rotate_180_ccw, rotate_180_cw, rotate_270_ccw, rotate_270_cw, rotate_360_ccw, rotate_360_cw, rotate_90_ccw, rotate_90_cw
 from src.functions.advance_functions.image_segmentation.supervised_segmentation import *
 from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.brightness_enhancement import enhance_brightness
 from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.contrast_enhancement import enhance_contrast
@@ -20,6 +20,26 @@ def rotView(f4):
     def display_selected():
         print("Selected option:", rotate_option.get())
 
+    def perform_rotation(degrees):
+        if rotate_option.get() == "Clockwise":
+            if degrees == 90:
+                rotate_90_cw()
+            elif degrees == 180:
+                rotate_180_cw()
+            elif degrees == 270:
+                rotate_270_cw()
+            elif degrees == 360:
+                rotate_360_cw()
+        else:  # Counter Clockwise
+            if degrees == 90:
+                rotate_90_ccw()
+            elif degrees == 180:
+                rotate_180_ccw()
+            elif degrees == 270:
+                rotate_270_ccw()
+            elif degrees == 360:
+                rotate_360_ccw()
+
     radio1 = tk.Radiobutton(f4, text="Clockwise", variable=rotate_option, value="Clockwise", command=display_selected)
     radio1.grid(row=0, column=0, sticky='w',padx=20,pady=20)
     f4.grid_rowconfigure(0,minsize=10)
@@ -28,19 +48,19 @@ def rotView(f4):
     radio2.grid(row=1, column=0, sticky='w',padx=20,pady=10)
     f4.grid_rowconfigure(1, minsize=20)
 
-    Deg90btn = tk.Button(f4, text='90°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:rotate())
+    Deg90btn = tk.Button(f4, text='90°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:perform_rotation(90))
     Deg90btn.grid(row=0, column=1, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(1, minsize=20)
 
-    Deg180btn = tk.Button(f4, text='180°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10)
+    Deg180btn = tk.Button(f4, text='180°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:perform_rotation(180))
     Deg180btn.grid(row=0, column=2, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(2, minsize=20)
 
-    Deg270btn = tk.Button(f4, text='270°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10)
+    Deg270btn = tk.Button(f4, text='270°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:perform_rotation(270))
     Deg270btn.grid(row=0, column=3, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(3, minsize=20)
 
-    Deg360btn = tk.Button(f4, text='360°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10)
+    Deg360btn = tk.Button(f4, text='360°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:perform_rotation(360))
     Deg360btn.grid(row=0, column=4, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(4, minsize=20)
 
@@ -123,6 +143,7 @@ def colorChangeView(f4):
 
 
 def imgSegView(f4):
+    # add edge detection codes here <- message to madhara
     clear_frame4(f4)
 
     l1 = tk.Label(f4, text="Supervised Segmentation", font=('Arial', 8), width=60, height=2,fg ='#063361')

@@ -4,7 +4,6 @@ from src.util.fileUtil import upload_image
 from src.functions.advance_functions.image_filters.sharpening import image_sharpening
 from src.functions.advance_functions.image_filters.smoothing import smoothing
 from src.functions.advance_functions.image_filters.edge_detection import edge_detection
-
 f3 = None
 EditedImgCanvas = None
 
