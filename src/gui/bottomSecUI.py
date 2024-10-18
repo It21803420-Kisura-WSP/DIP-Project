@@ -483,7 +483,7 @@ def styleTran(f4):
     monalisa = r"src\images\Styles\Mona_Lisa.jpg"
     starrynight = r"src\images\Styles\Starry_Night.jpg"
     scream = r"src\images\Styles\The_Scream.jpg"
-    anime = r"src\images\Styles\anime.jpeg"
+    anime = r"src\images\Styles\anime.jpg"
 
     # Create intensity slider
     intensity_scale = tk.Scale(f4, from_=0, to=1, resolution=0.01, orient=tk.HORIZONTAL, label="Style Intensity",**slider_style)
