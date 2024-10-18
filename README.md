@@ -14,5 +14,5 @@
 
 
 ### Deep Learning Requirements
-- [X] Image Enhancement 
-- [X] Style Transfer
+- [X] Image Enhancement - done by Kodithuwakku A K
+- [X] Style Transfer - done by Waynath S.P.K

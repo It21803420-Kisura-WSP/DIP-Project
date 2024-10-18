@@ -18,7 +18,7 @@ def main():
 
     # Set the geometry of the window (widthxheight+x+y)
     root.geometry(f"{window_width}x{window_height}+{x}+{y}")
-    root.title("Image Maker Pro")
+    root.title("Digital Image Manipulation App")
 
     createUI(root)
     root.mainloop()

@@ -187,7 +187,7 @@ def on_bw_intensity_change(val):
     convert_image_to_bw(val)
 
 def colorChangeView(f4):
-    print("colorChangeView called")  # Debug output
+    print("colorChangeView called")  
     clear_frame4(f4)
 
     # Add the "Color" button in the first row and first column
@@ -196,13 +196,13 @@ def colorChangeView(f4):
 
     # Grayscale intensity slider in the same row, second column
     gray_slider = tk.Scale(f4, from_=0, to=100, orient=tk.HORIZONTAL, label="Gray Intensity")
-    gray_slider.set(0)  # Default is 0, no grayscale effect
+    gray_slider.set(0)
     gray_slider.grid(row=0, column=1, padx=50, pady=50)
     gray_slider.config(**slider_style, command=on_gray_intensity_change)
 
     # Black-and-white intensity slider in the same row, third column
     bw_slider = tk.Scale(f4, from_=0, to=255, orient=tk.HORIZONTAL, label="BW Intensity")
-    bw_slider.set(0)  # Default is 0, no BW effect
+    bw_slider.set(0)  
     bw_slider.grid(row=0, column=2, padx=50, pady=50)
     bw_slider.config(**slider_style, command=on_bw_intensity_change)
 
