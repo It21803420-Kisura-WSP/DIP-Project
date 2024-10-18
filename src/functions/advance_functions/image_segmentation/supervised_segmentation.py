@@ -1,62 +1,51 @@
-# supervised segmentation algorithms
-
 # Global Imports
 import cv2 as cv
 import tkinter as tk
-from skimage.filters import gaussian
+from skimage import filters
 from src.util.fileUtil import get_resized_image
+from skimage.color import rgb2gray
 from PIL import Image, ImageTk
 import numpy as np
+from skimage.segmentation import chan_vese
 import matplotlib.pyplot as plt
-from skimage.color import rgb2gray
-from skimage.segmentation import chan_vese, active_contour
-from skimage import filters
 
-def active_contour_segmentation():
+def chan_vese_segmentation(max_iterations):
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
 
     resized_img = get_resized_image()
+    print(f"Resized Image: {resized_img is not None}")
     if resized_img is None:
         print("No image loaded")
         return
     
-    image_array = np.array(resized_img)
+    # Convert to image array and grayscale
     gray_image = rgb2gray(resized_img)
 
-    # Apply gaussian filter
-    gray_image_noiseless = gaussian(gray_image, 1)
+    # Computing the Chan-Vese segmentation technique
+    chanvese_result = chan_vese(gray_image, max_num_iter=max_iterations, extended_output=True)
+    print(f"Chan-Vese Result: {chanvese_result}")
 
-    # Localizing the circle's center (initial snake)
-    x1 = 220 + 100 * np.cos(np.linspace(0, 2 * np.pi, 500))
-    x2 = 100 + 100 * np.sin(np.linspace(0, 2 * np.pi, 500))
+    # Combine the segmented images for display
+    segmented_image = chanvese_result[0]  # Segmented image
+    final_level_set = chanvese_result[1]  # Final level set
+    
+    # Create a mask for the segmented image
+    mask = segmented_image > 0
+    output_image = np.zeros_like(gray_image)
+    output_image[mask] = segmented_image[mask]
 
-    # Generating a circle (initial snake) based on x1, x2
-    snake = np.array([x1, x2]).T
+    # Stack the images horizontally for display
+    combined_image = np.hstack((gray_image, output_image, final_level_set))
+    print(f"Combined Image Shape: {combined_image.shape}, dtype: {combined_image.dtype}")
 
-    # Computing the Active Contour for the given image using active_contour() function
-    image_snake = active_contour(gray_image_noiseless, snake)
-
-    # Create a figure and axes using Matplotlib
-    fig, ax = plt.subplots()
-    ax.imshow(gray_image_noiseless, cmap='gray')
-
-    # Plot the initial snake (red dashed line)
-    ax.plot(snake[:, 0], snake[:, 1], '--r', lw=3)
-
-    # Plot the active contour result (blue solid line)
-    ax.plot(image_snake[:, 0], image_snake[:, 1], '-b', lw=3)
-
-    # Save the Matplotlib figure to a temporary file
-    fig.savefig("active_contour_output.png")
-    plt.close(fig)
-
-    # Load the saved image as a PIL image
-    pil_image = Image.open("active_contour_output.png")
-    final_img = ImageTk.PhotoImage(pil_image)
+    # Convert combined image to PIL Image and then to ImageTk for Tkinter
+    combined_image_pil = Image.fromarray((combined_image * 255).astype(np.uint8))  # Scale to 0-255
+    final_img = ImageTk.PhotoImage(combined_image_pil)
 
     # Clear the canvas before displaying the new image
     for widget in EditedImgCanvas.winfo_children():
+        print(f"Clearing Widget: {widget}")
         widget.destroy()
 
     # Display the image in the Tkinter canvas
@@ -65,31 +54,8 @@ def active_contour_segmentation():
     img_label.pack()
 
 
-def chan_vese(image_path : str):
-    fig, axes = plt.subplots(1, 3, figsize=(10, 10))
 
-    image = Image.open(image_path).convert("RGB")
-    image_array = np.array(image)
-    gray_image = rgb2gray(image)
 
-    # Computing the Chan VESE segmentation technique
-    chanvese_gray_image = chan_vese(gray_image, max_num_iter=100, extended_output=True)
-    ax = axes.flatten()
-    
-    # Plotting the original image
-    ax[0].imshow(gray_image, cmap="gray")
-    ax[0].set_title("Original Image")
-    
-    # Plotting the segmented - 100 iterations image
-    ax[1].imshow(chanvese_gray_image[0], cmap="gray")
-    title = "Chan-Vese segmentation - {} iterations".format(len(chanvese_gray_image[2]))
-    
-    ax[1].set_title(title)
-    
-    # Plotting the final level set
-    ax[2].imshow(chanvese_gray_image[1], cmap="gray")
-    ax[2].set_title("Final Level Set")
-    plt.show()
 
 def threshold_manual_input(image_path : str):
     image = Image.open(image_path).convert("RGB")
@@ -107,7 +73,18 @@ def threshold_manual_input(image_path : str):
         plt.imshow(binarized_gray, cmap = 'gray')
     plt.tight_layout()
 
-def threshold_using_skiimage_filter():
+import tkinter as tk
+from skimage import filters
+import numpy as np
+from PIL import Image, ImageTk
+
+# Function to normalize the image
+def normalize_image(image):
+    # Normalize pixel values to range 0-255
+    normalized_image = (image - np.min(image)) / (np.max(image) - np.min(image)) * 255
+    return normalized_image.astype(np.uint8)  # Convert to uint8 for image processing
+
+def threshold_using_skiimage_filter(otsu_threshold, niblack_threshold, sauvola_threshold):
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
 
@@ -116,20 +93,25 @@ def threshold_using_skiimage_filter():
         print("No image loaded")
         return
     
-    image_array = np.array(resized_img)
     gray_image = rgb2gray(resized_img)
 
+    # Normalize the gray image
+    normalized_gray_image = normalize_image(gray_image)
+
     # Otsu Thresholding
-    threshold = filters.threshold_otsu(gray_image)
-    binarized_image_otsu = (gray_image > threshold).astype(np.uint8) * 255  # Convert to 0-255
+    if otsu_threshold == 0:
+        otsu_threshold = filters.threshold_otsu(normalized_gray_image)
+    binarized_image_otsu = (normalized_gray_image > otsu_threshold).astype(np.uint8) * 255  # Convert to 0-255
 
     # Niblack Thresholding
-    threshold_niblack = filters.threshold_niblack(gray_image)
-    binarized_image_niblack = (gray_image > threshold_niblack).astype(np.uint8) * 255
+    if niblack_threshold == 0:
+        niblack_threshold = filters.threshold_niblack(normalized_gray_image)
+    binarized_image_niblack = (normalized_gray_image > niblack_threshold).astype(np.uint8) * 255
 
     # Sauvola Thresholding
-    threshold_sauvola = filters.threshold_sauvola(gray_image)
-    binarized_image_sauvola = (gray_image > threshold_sauvola).astype(np.uint8) * 255
+    if sauvola_threshold == 0:
+        sauvola_threshold = filters.threshold_sauvola(normalized_gray_image)
+    binarized_image_sauvola = (normalized_gray_image > sauvola_threshold).astype(np.uint8) * 255
 
     # Combine the three images horizontally for display in Tkinter
     combined_image = np.hstack((binarized_image_otsu, binarized_image_niblack, binarized_image_sauvola))

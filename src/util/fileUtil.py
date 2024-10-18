@@ -45,3 +45,4 @@ def cv2_to_tk_image(cv_image):
 def get_resized_image():
     global resized_img
     return resized_img
+

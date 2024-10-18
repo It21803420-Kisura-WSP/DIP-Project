@@ -2,105 +2,115 @@
 
 # Global Imports
 from skimage.segmentation import slic, mark_boundaries, felzenszwalb
-from PIL import Image
+import tkinter as tk
+from PIL import Image, ImageTk
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage.color import label2rgb
 import cv2
-
-def felzenszwalbs(image_path : str):
-    image = Image.open(image_path).convert("RGB")
-    image_array = np.array(image)
-
-    plt.figure(figsize=(15,15))
-    
-    # computing the Felzenszwalb's
-    # Segmentation with sigma = 5 and minimum
-    # size = 100
-    image_segments = felzenszwalb(image_array, scale = 2, sigma=5, min_size=100)
-    
-    # Plotting the original image
-    plt.subplot(1,2,1)
-    plt.imshow(image_array)
-    
-    # Marking the boundaries of
-    # Felzenszwalb's segmentations
-    plt.subplot(1,2,2)
-    plt.imshow(mark_boundaries(image_array, image_segments))
+from src.util.fileUtil import get_resized_image
 
 
-def mark_bounderies(image_path : str):
-    image = Image.open(image_path).convert("RGB")
-    image_array = np.array(image)
+import cv2 as cv
+import numpy as np
+import tkinter as tk
+from PIL import Image, ImageTk
+import matplotlib.pyplot as plt
+from skimage.segmentation import felzenszwalb, mark_boundaries
+from src.util.fileUtil import get_resized_image
 
-    plt.figure(figsize=(15, 15))
-
-    # Applying SLIC segmentation
-    # for the edges to be drawn over
-    image_segments = slic(image_array, n_segments=100, compactness=1)
-
-    plt.subplot(1, 2, 1)
-    plt.imshow(image)
-
-    # Detecting boundaries for labels
-    plt.subplot(1, 2, 2)
-    
-    # Plotting the output of marked_boundaries
-    # function i.e. the image with segmented boundaries
-    plt.imshow(mark_boundaries(image_array, image_segments))
-
-def simple_linear_iterative_clustering(image_path : str):
-    image = Image.open(image_path).convert("RGB")
-    image_array = np.array(image)
-
-    plt.figure(figsize=(15,15))
-    
-    # Applying Simple Linear Iterative
-    # Clustering on the image
-    # - 50 segments & compactness = 10
-    image_segments = slic(image_array, n_segments=50, compactness=10)
-    plt.subplot(1,2,1)
-    
-    # Plotting the original image
-    plt.imshow(image_array)
-    plt.subplot(1,2,2)
-    
-    # Converts a label image into
-    # an RGB color image for visualizing
-    # the labeled regions. 
-    plt.imshow(label2rgb(image_segments, image_array, kind = 'avg'))
+import cv2 as cv
+import numpy as np
+import tkinter as tk
+from PIL import Image, ImageTk
+from skimage.segmentation import felzenszwalb, mark_boundaries
+from src.util.fileUtil import get_resized_image
 
 
-def k_means_clustering(image_path : str, kvalue : int):
-    image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+def felzenszwalbs(scale_slider, sigma_slider, min_size_slider):
+    scale = scale_slider.get()
+    sigma = sigma_slider.get()
+    min_size = min_size_slider.get()
 
-    # Reshaping the image into a 2D array of pixels and 3 color values (RGB)
-    pixel_vals = image.reshape((-1,3))
-    
-    # Convert to float type
-    pixel_vals = np.float32(pixel_vals)
+    from skimage.segmentation import felzenszwalb, mark_boundaries
+    from src.gui.mainUI import get_EditedImgCanvas
+    EditedImgCanvas = get_EditedImgCanvas()
 
-    #the below line of code defines the criteria for the algorithm to stop running, 
-    #which will happen is 100 iterations are run or the epsilon (which is the required accuracy) 
-    #becomes 85%
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.85)
-    
-    # then perform k-means clustering with number of clusters defined as 3
-    #also random centres are initially choosed for k-means clustering
-    k = kvalue
-    retval, labels, centers = cv2.kmeans(pixel_vals, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
-    
-    # convert data into 8-bit values
-    centers = np.uint8(centers)
-    segmented_data = centers[labels.flatten()]
-    
-    # reshape data into the original image dimensions
-    segmented_image = segmented_data.reshape((image.shape))
-    
-    plt.imshow(segmented_image)
+    # Get the resized image
+    resized_img = get_resized_image()
+    if resized_img is None:
+        print("No image loaded")
+        return
 
-"""
-test for k-means clustering
-k_means_clustering("image.png", 3)
-"""
+    image_array = np.array(resized_img)
+
+    # Getting values from sliders
+    scale = scale_slider.get()
+    sigma = sigma_slider.get()
+    min_size = min_size_slider.get()
+
+    # Computing Felzenszwalb's segmentation with slider values
+    image_segments = felzenszwalb(image_array, scale=scale, sigma=sigma, min_size=min_size)
+
+    # Marking the boundaries of the segmentation
+    segmented_image_with_boundaries = mark_boundaries(image_array, image_segments)
+
+    # Convert the image to uint8 format for displaying in Tkinter
+    segmented_image_with_boundaries = (segmented_image_with_boundaries * 255).astype(np.uint8)
+
+    # Convert the image to RGB format for Pillow
+    segmented_image_rgb = cv.cvtColor(segmented_image_with_boundaries, cv.COLOR_BGR2RGB)
+
+    # Convert the image to a format compatible with Tkinter
+    final_img = ImageTk.PhotoImage(Image.fromarray(segmented_image_rgb))
+
+    # Clear the canvas before displaying the new image
+    for widget in EditedImgCanvas.winfo_children():
+        widget.destroy()
+
+    # Display the image in the Tkinter canvas
+    img_label = tk.Label(EditedImgCanvas, image=final_img)
+    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.pack()
+
+
+
+
+def mark_boundaries_on_canvas(n_segments, compactness):
+    from skimage.segmentation import slic, mark_boundaries
+    from src.gui.mainUI import get_EditedImgCanvas
+
+    EditedImgCanvas = get_EditedImgCanvas()
+
+    # Get the resized image
+    resized_img = get_resized_image()
+    if resized_img is None:
+        print("No image loaded")
+        return
+
+    # Convert image to a NumPy array for segmentation
+    image_array = np.array(resized_img)
+
+    # Apply SLIC segmentation with passed arguments
+    image_segments = slic(image_array, n_segments=n_segments, compactness=compactness)
+
+    # Mark the boundaries of the segmentation
+    image_with_boundaries = mark_boundaries(image_array, image_segments)
+
+    # Convert to uint8 format for Tkinter display
+    image_with_boundaries = (image_with_boundaries * 255).astype(np.uint8)
+
+    # Convert to RGB format for Pillow
+    image_rgb = cv.cvtColor(image_with_boundaries, cv.COLOR_BGR2RGB)
+
+    # Convert the image to a format compatible with Tkinter
+    final_img = ImageTk.PhotoImage(Image.fromarray(image_rgb))
+
+    # Clear the canvas before displaying the new image
+    for widget in EditedImgCanvas.winfo_children():
+        widget.destroy()
+
+    # Display the image in the Tkinter canvas
+    img_label = tk.Label(EditedImgCanvas, image=final_img)
+    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.pack()

@@ -3,10 +3,63 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import cv2 as cv
 from tkinter import messagebox
-from src.functions.basic_functions.rotate import rotate_180_ccw, rotate_180_cw, rotate_270_ccw, rotate_270_cw, rotate_360_ccw, rotate_360_cw, rotate_90_ccw, rotate_90_cw
+from src.functions.basic_functions.rotate import *
 from src.functions.advance_functions.image_segmentation.supervised_segmentation import *
-from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.brightness_enhancement import enhance_brightness
-from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.contrast_enhancement import enhance_contrast
+from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.brightness_enhancement import *
+from src.functions.basic_functions.flip import *
+from src.functions.basic_functions.crop import *
+from src.functions.basic_functions.color_change import *
+from src.functions.advance_functions.image_segmentation.unsupervised_segmentation import *
+from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.color_balance import *
+from src.functions.deep_learning_algorithms.image_enhancement import *
+from src.functions.deep_learning_algorithms.style_transfer import *
+from src.images import *
+from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.contrast_enhancement import *
+from src.functions.advance_functions.intensity_manipulation_by_color_transformation_alogrithms.gamma_correction import *
+from src.functions.advance_functions.image_filters.embossing import *
+from src.functions.advance_functions.image_filters.edge_detection import *
+from src.functions.advance_functions.image_filters.sharpening import *
+from src.functions.advance_functions.image_filters.smoothing import *
+
+btnF = '#0f1112'
+btnB = '#b3e6e1'
+btnA = '#d5e4eb'
+primaryC = '#010d17'
+borderC = 'white'
+
+slider_style = {
+    'bg': primaryC,
+    'fg': borderC,
+    'highlightthickness': 0,
+    'bd': 0,
+    'font': ('Arial', 8),
+    'length': 150, 
+    'width': 10     
+}
+
+button_style = {
+        'bg': btnB,
+        'fg': btnF,
+        'activebackground': btnA,
+        'font': ('Arial', 8),
+        'relief': 'flat',  # Use flat to avoid borders
+        'borderwidth': 0,
+        'highlightthickness': 0,
+        'width': 15,
+        'height': 2
+    }
+radio_button_style = {
+    'bg': btnB,                # Background color of the radio button
+    'fg': btnF,                # Text color of the label
+    'activebackground': btnA,  # Background color when selected
+    'font': ('Arial', 8),      # Font for the label
+    'indicatoron': 1,          # Use default circular radio button indicator
+    'highlightthickness': 0,   # Removes border highlight
+    'borderwidth': 0,          # No border
+    'width': 15,               # Width of the radio button
+    'height': 2                # Height of the radio button
+}
+
 
 def clear_frame4(frame):
     for widget in frame.winfo_children():
@@ -40,38 +93,38 @@ def rotView(f4):
             elif degrees == 360:
                 rotate_360_ccw()
 
-    radio1 = tk.Radiobutton(f4, text="Clockwise", variable=rotate_option, value="Clockwise", command=display_selected)
+    radio1 = tk.Radiobutton(f4, text="Clockwise", variable=rotate_option, value="Clockwise", command=display_selected,**radio_button_style)
     radio1.grid(row=0, column=0, sticky='w',padx=20,pady=20)
     f4.grid_rowconfigure(0,minsize=10)
 
-    radio2 = tk.Radiobutton(f4, text="Counter Clockwise", variable=rotate_option, value="Counter Clockwise", command=display_selected)
+    radio2 = tk.Radiobutton(f4, text="Counter Clockwise", variable=rotate_option, value="Counter Clockwise", command=display_selected,**radio_button_style)
     radio2.grid(row=1, column=0, sticky='w',padx=20,pady=10)
     f4.grid_rowconfigure(1, minsize=20)
 
-    Deg90btn = tk.Button(f4, text='90°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:perform_rotation(90))
+    Deg90btn = tk.Button(f4, text='90°',**button_style, padx=20,pady=10,command=lambda:perform_rotation(90))
     Deg90btn.grid(row=0, column=1, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(1, minsize=20)
 
-    Deg180btn = tk.Button(f4, text='180°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:perform_rotation(180))
+    Deg180btn = tk.Button(f4, text='180°',**button_style, padx=20,pady=10,command=lambda:perform_rotation(180))
     Deg180btn.grid(row=0, column=2, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(2, minsize=20)
 
-    Deg270btn = tk.Button(f4, text='270°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:perform_rotation(270))
+    Deg270btn = tk.Button(f4, text='270°',**button_style, padx=20,pady=10,command=lambda:perform_rotation(270))
     Deg270btn.grid(row=0, column=3, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(3, minsize=20)
 
-    Deg360btn = tk.Button(f4, text='360°', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10,command=lambda:perform_rotation(360))
+    Deg360btn = tk.Button(f4, text='360°',**button_style, padx=20,pady=10,command=lambda:perform_rotation(360))
     Deg360btn.grid(row=0, column=4, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(4, minsize=20)
 
 def flipView(f4):
     clear_frame4(f4)
 
-    verticalFlipbtn = tk.Button(f4, text='Vertical Flip', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10)
+    verticalFlipbtn = tk.Button(f4, text='Vertical Flip',**button_style, padx=20,pady=10,command=lambda:vertical_flip())
     verticalFlipbtn.grid(row=0, column=5, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(5, minsize=20)
 
-    horizontalFlipbtn = tk.Button(f4, text='Horizontal Flip', font=('Arial', 8), relief='flat', highlightthickness=1, borderwidth=1, padx=20,pady=10)
+    horizontalFlipbtn = tk.Button(f4, text='Horizontal Flip', **button_style, padx=20,pady=10,command=lambda:horizontal_flip())
     horizontalFlipbtn.grid(row=0, column=6, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(6, minsize=20)
 
@@ -85,11 +138,13 @@ def cropView(f4):
             num3 = float(entry3.get())
             num4 = float(entry4.get())
 
-            messagebox.showinfo("Numbers Entered", f"You entered: {num1}, {num2}, {num3}, {num4}")
+            
         except ValueError:
             messagebox.showerror("Invalid Input", "Please enter valid numbers in all fields.")
 
-    l1 = tk.Label(f4, text="Starting Point(X)", font=('Arial', 8), width=30, height=2,fg ='#063361')
+        crop(num1,num2,num3,num4)
+
+    l1 = tk.Label(f4, text="Starting Point(X)", font=('Arial', 8), width=30, height=2,fg = borderC,bg=primaryC)
     l1.grid(row=1, column=0, sticky='w')
     f4.grid_columnconfigure(0, minsize=50)
 
@@ -97,7 +152,7 @@ def cropView(f4):
     entry1.grid(row=0, column=0, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(0, minsize=20)
 
-    l2 = tk.Label(f4, text="End Point(X)", font=('Arial', 8), width=30, height=2,fg ='#063361')
+    l2 = tk.Label(f4, text="End Point(X)", font=('Arial', 8), width=30, height=2,fg = borderC,bg=primaryC)
     l2.grid(row=1, column=1, sticky='w')
     f4.grid_columnconfigure(1, minsize=50)
 
@@ -105,7 +160,7 @@ def cropView(f4):
     entry2.grid(row=0, column=1, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(1, minsize=20)
 
-    l3 = tk.Label(f4, text="Starting Point(Y)", font=('Arial', 8), width=30, height=2,fg ='#063361')
+    l3 = tk.Label(f4, text="Starting Point(Y)", font=('Arial', 8), width=30, height=2,fg = borderC,bg=primaryC)
     l3.grid(row=1, column=2, sticky='w')
     f4.grid_columnconfigure(2, minsize=50)
     
@@ -113,7 +168,7 @@ def cropView(f4):
     entry3.grid(row=0, column=2, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(2, minsize=20)
 
-    l4 = tk.Label(f4, text="End Point(Y)", font=('Arial', 8), width=30, height=2,fg ='#063361')
+    l4 = tk.Label(f4, text="End Point(Y)", font=('Arial', 8), width=30, height=2,fg = borderC,bg=primaryC)
     l4.grid(row=1, column=3, sticky='w')
     f4.grid_columnconfigure(3, minsize=50)
 
@@ -121,79 +176,477 @@ def cropView(f4):
     entry4.grid(row=0, column=3, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(3, minsize=20)
 
-    submitbtn = tk.Button(f4, text="Crop", command=get_numbers)
+    submitbtn = tk.Button(f4, text="Crop", command=lambda:get_numbers(),**button_style)
     submitbtn.grid(row=0, column=4, sticky='w',padx=20,pady=20)
     f4.grid_columnconfigure(4, minsize=20)
 
+def on_gray_intensity_change(val):
+    convert_image_to_grayscale(val)
+
+def on_bw_intensity_change(val):
+    convert_image_to_bw(val)
 
 def colorChangeView(f4):
+    print("colorChangeView called")  # Debug output
     clear_frame4(f4)
 
-    colorBtn = tk.Button(f4, text="Color", )
-    colorBtn.grid(row=0, column=0, sticky='w',padx=20,pady=20)
-    f4.grid_columnconfigure(0, minsize=20)
+    # Add the "Color" button in the first row and first column
+    colorBtn = tk.Button(f4, text="Color", command=lambda: convert_image_to_color(), **button_style)
+    colorBtn.grid(row=0, column=0, sticky='w', padx=50, pady=50)
 
-    grayBtn = tk.Button(f4, text="Gray Scale")
-    grayBtn.grid(row=0, column=1, sticky='w',padx=20,pady=20)
-    f4.grid_columnconfigure(1, minsize=20)
+    # Grayscale intensity slider in the same row, second column
+    gray_slider = tk.Scale(f4, from_=0, to=100, orient=tk.HORIZONTAL, label="Gray Intensity")
+    gray_slider.set(0)  # Default is 0, no grayscale effect
+    gray_slider.grid(row=0, column=1, padx=50, pady=50)
+    gray_slider.config(**slider_style, command=on_gray_intensity_change)
 
-    bwBtn = tk.Button(f4, text="BW")
-    bwBtn.grid(row=0, column=2, sticky='w',padx=20,pady=20)
-    f4.grid_columnconfigure(2, minsize=20)
+    # Black-and-white intensity slider in the same row, third column
+    bw_slider = tk.Scale(f4, from_=0, to=255, orient=tk.HORIZONTAL, label="BW Intensity")
+    bw_slider.set(0)  # Default is 0, no BW effect
+    bw_slider.grid(row=0, column=2, padx=50, pady=50)
+    bw_slider.config(**slider_style, command=on_bw_intensity_change)
+
+    # Configure columns to set minimum sizes (this is optional)
+    f4.grid_columnconfigure(0, minsize=100)
+    f4.grid_columnconfigure(1, minsize=150)
+    f4.grid_columnconfigure(2, minsize=150)
+
 
 
 def imgSegView(f4):
-    # add edge detection codes here <- message to madhara
-    clear_frame4(f4)
+    clear_frame4(f4)  # Clear the previous UI elements
 
-    l1 = tk.Label(f4, text="Supervised Segmentation", font=('Arial', 8), width=60, height=2,fg ='#063361')
-    l1.grid(row=0, column=0, sticky='w')
-    f4.grid_columnconfigure(0, minsize=50)
+    # ------------------ Chan ------------------
+    frame_chan = tk.Frame(f4, bd=0, highlightbackground='white', highlightcolor='white', highlightthickness=0)
+    frame_chan.grid(row=0, column=0, padx=(50, 50), pady=10)
+    frame_chan.config(bg=primaryC)
 
-    l2 = tk.Label(f4, text="Unsupervised Segmentation", font=('Arial', 8), width=60, height=2,fg ='#063361')
-    l2.grid(row=0, column=1, sticky='w',padx=50)
-    f4.grid_columnconfigure(1, minsize=50)
 
-    acsBtn = tk.Button(f4, text="Active Contour Segmentation", command=lambda:active_contour_segmentation())
-    acsBtn.grid(row=1, column=0, sticky='w',padx=20,pady=20)
-    f4.grid_rowconfigure(1, minsize=20)
+    l1 = tk.Label(frame_chan, text="Chan-Vese Segmentation", font=('Arial', 8), width=30, height=2, bg=primaryC, fg=borderC)
+    l1.grid(row=0, column=0, columnspan=2, sticky='w', padx=5, pady=(5, 10))  # Added separation below the label
 
-    cvsBtn = tk.Button(f4, text="Chan vese Segmentation", )
-    cvsBtn.grid(row=2, column=0, sticky='w',padx=20,pady=20)
-    f4.grid_rowconfigure(2, minsize=20)
+    iteration_slider = tk.Scale(frame_chan, from_=1, to=250, orient='horizontal', label='Max Iterations',bg=primaryC, fg=borderC)
+    iteration_slider.set(0)  # Default value for the slider
+    iteration_slider.grid(row=1, column=0, sticky='ew', padx=5, pady=(0, 5))
+    # iteration_slider.config(**slider_style)
 
-    sbtmiBtn = tk.Button(f4, text="Segmentation By Threshold manual input", )
-    sbtmiBtn.grid(row=1, column=0, sticky='w',padx=200,pady=20)
-    f4.grid_rowconfigure(1, minsize=20)
+    cvsBtn = tk.Button(frame_chan, text="Apply", **button_style, 
+                       command=lambda: chan_vese_segmentation(iteration_slider.get()))
+    cvsBtn.grid(row=2, column=0, columnspan=2, sticky='ew', padx=5, pady=(0, 10))
 
-    sbtusmBtn = tk.Button(f4, text="Segmentation By Threshold using skimagefilter module",command=lambda:threshold_using_skiimage_filter() )
-    sbtusmBtn.grid(row=2, column=0, sticky='w',padx=200,pady=20)
-    f4.grid_columnconfigure(2, minsize=20)
+    # ------------------ Ski ------------------
+    frame_ski = tk.Frame(f4, bd=1, highlightbackground='white', highlightcolor='white', highlightthickness=0)
+    frame_ski.grid(row=0, column=1, padx=(50, 50), pady=10)
+    frame_ski.config(bg=primaryC)
 
-    fsBtn = tk.Button(f4, text="Felzenszwalbs Segmentation" )
-    fsBtn.grid(row=1, column=1, sticky='w',padx=20,pady=20)
-    f4.grid_columnconfigure(1, minsize=20)
+    l2 = tk.Label(frame_ski, text="Threshold using skiimage", font=('Arial', 8), width=30, height=2, bg=primaryC, fg=borderC)
+    l2.grid(row=0, column=0, columnspan=2, sticky='w', padx=5, pady=(5, 10))
 
-    mbBtn = tk.Button(f4, text="Mark Boundaries" )
-    mbBtn.grid(row=1, column=1, sticky='w',padx=200,pady=20)
-    f4.grid_columnconfigure(1, minsize=20)
+    # Otsu Threshold Slider
+    otsu_slider = tk.Scale(frame_ski, from_=0, to=255, resolution=1, label="Otsu Threshold", 
+                        orient=tk.HORIZONTAL, bg=primaryC, fg=borderC)  # Updated color settings
+    otsu_slider.set(0)  # Default value
+    otsu_slider.grid(row=1, column=0, sticky='ew', padx=5, pady=(0, 5))
 
-    slicBtn = tk.Button(f4, text="Simple Linear Iterative Clustering" )
-    slicBtn.grid(row=2, column=1, sticky='w',padx=20,pady=20)
-    f4.grid_columnconfigure(0, minsize=20)
+    # Niblack Threshold Slider
+    niblack_slider = tk.Scale(frame_ski, from_=0, to=255, resolution=1, label="Niblack Threshold", 
+                            orient=tk.HORIZONTAL, bg=primaryC, fg=borderC)  # Updated color settings
+    niblack_slider.set(0)  # Default value
+    niblack_slider.grid(row=1, column=1, sticky='ew', padx=5, pady=(0, 5))
 
+    # Sauvola Threshold Slider
+    sauvola_slider = tk.Scale(frame_ski, from_=0, to=255, resolution=1, label="Sauvola Threshold", 
+                            orient=tk.HORIZONTAL, bg=primaryC, fg=borderC)  # Updated color settings
+    sauvola_slider.set(0)  # Default value
+    sauvola_slider.grid(row=2, column=0, sticky='ew', padx=5, pady=(0, 5))
+
+    # Apply Button
+    apply_button = tk.Button(frame_ski, text="Apply", **button_style,
+                            command=lambda: threshold_using_skiimage_filter(otsu_slider.get(), niblack_slider.get(), sauvola_slider.get()))
+    apply_button.grid(row=2, column=1, sticky='ew', padx=5, pady=(0, 10))
+
+
+    # ------------------ Felzen ------------------
+    frame_felzen = tk.Frame(f4, bd=1, highlightbackground='white', highlightcolor='white', highlightthickness=0)
+    frame_felzen.grid(row=0, column=2, padx=(50, 50), pady=10)
+    frame_felzen.config(bg=primaryC)  # Set background color for the frame
+
+    l3 = tk.Label(frame_felzen, text="Felzenszwalbs Segmentation", font=('Arial', 8), width=30, height=2, 
+                bg=primaryC, fg=borderC)  # Updated label colors
+    l3.grid(row=0, column=0, columnspan=2, sticky='w', padx=5, pady=(5, 10))
+
+    # Scale Slider
+    scale_slider = tk.Scale(frame_felzen, from_=1, to=100, resolution=1, label="Scale", 
+                            orient=tk.HORIZONTAL, bg=primaryC, fg=borderC)  # Updated color settings
+    scale_slider.set(0)  # Default value
+    scale_slider.grid(row=1, column=0, sticky='ew', padx=5, pady=(0, 5))
+
+    # Sigma Slider
+    sigma_slider = tk.Scale(frame_felzen, from_=0.1, to=10.0, resolution=0.1, label="Sigma", 
+                            orient=tk.HORIZONTAL, bg=primaryC, fg=borderC)  # Updated color settings
+    sigma_slider.set(5.0)  # Default value
+    sigma_slider.grid(row=1, column=1, sticky='ew', padx=5, pady=(0, 5))
+
+    # Min Size Slider
+    min_size_slider = tk.Scale(frame_felzen, from_=1, to=500, resolution=1, label="Min Size", 
+                            orient=tk.HORIZONTAL, bg=primaryC, fg=borderC)  # Updated color settings
+    min_size_slider.set(100)  # Default value
+    min_size_slider.grid(row=2, column=0, sticky='ew', padx=5, pady=(0, 5))
+
+    # Felzenszwalbs Button
+    fsBtn = tk.Button(frame_felzen, text="Apply",
+                    command=lambda: felzenszwalbs(scale_slider, sigma_slider, min_size_slider), **button_style)
+    fsBtn.grid(row=2, column=1, sticky='ew', padx=5, pady=(0, 10))
+
+
+    # ------------------ Mark ------------------
+    frame_mark = tk.Frame(f4, bd=1, highlightbackground='white', highlightcolor='white', highlightthickness=0)
+    frame_mark.grid(row=0, column=3, padx=(50, 50), pady=10)
+    frame_mark.config(bg=primaryC)  # Set background color for the frame
+
+    l4 = tk.Label(frame_mark, text="Mark Boundaries", font=('Arial', 8), width=30, height=2, 
+                bg=primaryC, fg=borderC)  # Updated label colors
+    l4.grid(row=0, column=0, columnspan=2, sticky='w', padx=5, pady=(5, 10))
+
+    # Number of Segments Slider
+    n_segments_slider = tk.Scale(frame_mark, from_=10, to=500, resolution=1, label="Number of Segments", 
+                                orient=tk.HORIZONTAL, bg=primaryC, fg=borderC)  # Updated color settings
+    n_segments_slider.set(100)  # Default value
+    n_segments_slider.grid(row=1, column=0, sticky='ew', padx=5, pady=(0, 5))
+
+    # Compactness Slider
+    compactness_slider = tk.Scale(frame_mark, from_=0.1, to=10.0, resolution=0.1, label="Compactness", 
+                                orient=tk.HORIZONTAL, bg=primaryC, fg=borderC)  # Updated color settings
+    compactness_slider.set(1.0)  # Default value
+    compactness_slider.grid(row=1, column=1, sticky='ew', padx=5, pady=(0, 5))
+
+    # Mark Boundaries Button
+    mbBtn = tk.Button(frame_mark, text="Apply",
+                    command=lambda: mark_boundaries_on_canvas(n_segments_slider.get(), compactness_slider.get()), **button_style)
+    mbBtn.grid(row=2, column=0, columnspan=2, sticky='ew', padx=5, pady=(0, 10))
+
+# ---------------------------------get values
+
+def on_brightness_change(val):
+
+    brightness_value = float(val)
+    enhance_brightness(brightness_value)
+
+def on_contrast_change(val):
+
+    contrast_value = float(val)
+    enhance_contrast(contrast_value)
+
+def on_gamma_change(val):
+
+    gamma_value = float(val)
+    apply_gamma_correction(gamma_value)
+
+# --------------intensity Manipulation -------
 
 def intensityManipulation(f4):
     clear_frame4(f4)
 
-    briBtn = tk.Button(f4, text="Increase brigtness",command=lambda:enhance_brightness() )
-    briBtn.grid(row=0, column=0, sticky='w',padx=20,pady=20)
-    f4.grid_columnconfigure(0, minsize=20)
+    # Reset grid configuration for f4 to ensure it doesn't affect other sections
+    f4.grid_columnconfigure(0, weight=1)
+    f4.grid_columnconfigure(1, weight=1)
+    f4.grid_columnconfigure(2, weight=1)
 
-    conBtn = tk.Button(f4, text="Increase Contrast",command=lambda:enhance_contrast())
-    conBtn.grid(row=0, column=1, sticky='w',padx=20,pady=20)
-    f4.grid_columnconfigure(1, minsize=20)
+    # ----------- Brightness Slider -----------
+    brightness_slider = tk.Scale(f4, from_=0.5, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Brightness")
+    brightness_slider.set(0)
+    brightness_slider.grid(row=0, column=0, padx=50, pady=50, sticky='nsew')
+    brightness_slider.config(command=on_brightness_change, **slider_style)
 
-    bwBtn = tk.Button(f4, text="BW")
-    bwBtn.grid(row=0, column=2, sticky='w',padx=20,pady=20)
-    f4.grid_columnconfigure(2, minsize=20)
+    # ----------- Contrast Slider -----------
+    contrast_slider = tk.Scale(f4, from_=0.5, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Contrast")
+    contrast_slider.set(0)
+    contrast_slider.grid(row=0, column=1, padx=50, pady=50, sticky='nsew')
+    contrast_slider.config(command=on_contrast_change, **slider_style)
+
+    # ----------- Gamma Slider -----------
+    gamma_slider = tk.Scale(f4, from_=0.1, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Gamma")
+    gamma_slider.set(0)  # Set default gamma value
+    gamma_slider.grid(row=0, column=2, padx=50, pady=50, sticky='nsew')
+    gamma_slider.config(command=on_gamma_change, **slider_style)
+
+    # Prevent excessive stretching by limiting the grid's weight
+    for i in range(3):
+        f4.grid_columnconfigure(i, weight=0)  # Ensure sliders don't stretch
+
+
+# -----------------------------------------
+
+def colorCorrectionView(f4):
+    clear_frame4(f4)
+
+    # Get the resized image
+    resized_img = get_resized_image()
+    if resized_img is None:
+        print("No image loaded")
+        return
+
+    # Convert resized image to numpy array for manipulation
+    img_array = np.array(resized_img)
+
+    # Initialize HSV values based on the average of the image
+    hsv_img = cv2.cvtColor(img_array, cv2.COLOR_RGB2HSV)
+    h, s, v = cv2.split(hsv_img)
+    
+    # Initialize variables for sliders
+    hue_var = tk.DoubleVar(value=0)  # Starting hue adjustment
+    saturation_var = tk.DoubleVar(value=1)  # Starting saturation (1 means no change)
+    value_var = tk.DoubleVar(value=1)  # Starting value (1 means no change)
+
+    def get_correction_values():
+        hue = hue_var.get()
+        saturation = saturation_var.get()
+        value = value_var.get()
+        color_correction(hue, saturation, value)
+
+    # Hue Slider
+    l_hue = tk.Label(f4, text="Hue Adjustment (-180 to 180)", font=('Arial', 8), fg=borderC, bg=primaryC)
+    l_hue.grid(row=1, column=0, sticky='w', padx=(10, 5))
+    hue_slider = tk.Scale(f4, from_=-180, to=180, orient='horizontal', variable=hue_var)
+    hue_slider.grid(row=1, column=1, sticky='w', padx=(0, 10))
+    hue_slider.config(**slider_style)
+
+    # Saturation Slider
+    l_saturation = tk.Label(f4, text="Saturation Adjustment (0-3)", font=('Arial', 8), fg=borderC, bg=primaryC)
+    l_saturation.grid(row=1, column=2, sticky='w', padx=(10, 5))
+    saturation_slider = tk.Scale(f4, from_=0, to=3, orient='horizontal', resolution=0.1, variable=saturation_var)
+    saturation_slider.grid(row=1, column=3, sticky='w', padx=(0, 10))
+    saturation_slider.config(**slider_style)
+
+    # Value Slider
+    l_value = tk.Label(f4, text="Brightness Adjustment (0-3)", font=('Arial', 8), fg=borderC, bg=primaryC)
+    l_value.grid(row=1, column=4, sticky='w', padx=(10, 5))
+    value_slider = tk.Scale(f4, from_=0, to=3, orient='horizontal', resolution=0.1, variable=value_var)
+    value_slider.grid(row=1, column=5, sticky='w', padx=(0, 10))
+    value_slider.config(**slider_style)
+
+    # Submit Button
+    submit_btn = tk.Button(f4, text="Apply", command=get_correction_values, **button_style)
+    submit_btn.grid(row=1, column=6, columnspan=6, sticky='w', padx=20, pady=20)
+
+# Callback functions to update the effect intensity in real-time
+def on_noise_intensity_change(val):
+    reducing_noise(int(float(val)))
+
+def on_color_noise_intensity_change(val):
+    reducing_noise_colored(int(float(val)))
+
+def on_sharpening_intensity_change(val):
+    sharpening_image(int(float(val)))
+
+
+# UI Layout for Sliders and Buttons in One Row
+def imageEnhancements(f4):
+    clear_frame4(f4)
+
+    # Create sliders for controlling the intensity of each effect
+    noiseSlider = tk.Scale(f4, from_=0, to=10, orient=tk.HORIZONTAL, resolution=1, label="Noise Reduction Intensity",**slider_style)
+    noiseSlider.set(0)  # Default intensity is 0
+    noiseSlider.grid(row=0, column=0, padx=20, pady=20)
+    
+    colorNoiseSlider = tk.Scale(f4, from_=0, to=10, orient=tk.HORIZONTAL, resolution=1, label="ColorNoise Reduction Intensity",**slider_style)
+    colorNoiseSlider.set(0)  # Default intensity is 0
+    colorNoiseSlider.grid(row=0, column=1, padx=20, pady=20)
+    
+    sharpenSlider = tk.Scale(f4, from_=1, to=10, orient=tk.HORIZONTAL, resolution=1, label="Sharpening Intensity",**slider_style)
+    sharpenSlider.set(0)  # Default intensity is 0
+    sharpenSlider.grid(row=0, column=2, padx=20, pady=20)
+
+    # Create buttons to apply each effect
+    noise_button = tk.Button(f4, text="Apply", 
+                             command=lambda: reducing_noise(int(noiseSlider.get())),**button_style)
+    noise_button.grid(row=1, column=0, padx=20, pady=20)
+
+    color_noise_button = tk.Button(f4, text="Apply", 
+                                   command=lambda: reducing_noise_colored(int(colorNoiseSlider.get())),**button_style)
+    color_noise_button.grid(row=1, column=1, padx=20, pady=20)
+
+    sharpen_button = tk.Button(f4, text="Apply", 
+                               command=lambda: sharpening_image(int(sharpenSlider.get())),**button_style)
+    sharpen_button.grid(row=1, column=2, padx=20, pady=20)
+
+    # Configure the grid layout to ensure columns are evenly spaced
+    f4.grid_columnconfigure(0, minsize=150)
+    f4.grid_columnconfigure(1, minsize=150)
+    f4.grid_columnconfigure(2, minsize=150)
+
+
+
+def styleTran(f4):
+    clear_frame4(f4)
+
+    monalisa = r"src\images\Styles\Mona_Lisa.jpg"
+    starrynight = r"src\images\Styles\Starry_Night.jpg"
+    scream = r"src\images\Styles\The_Scream.jpg"
+    anime = r"src\images\Styles\anime.jpeg"
+
+    # Create intensity slider
+    intensity_scale = tk.Scale(f4, from_=0, to=1, resolution=0.01, orient=tk.HORIZONTAL, label="Style Intensity",**slider_style)
+    intensity_scale.set(0)  # Set default intensity to 0 (no style)
+    intensity_scale.grid(row=0, column=0, columnspan=4, padx=50, pady=5)  # Use grid for better layout
+
+    # Create style buttons in the same row
+    Style1 = tk.Button(f4, text="Mona Lisa", command=lambda: using_google_arbitary_image_stylization_model(monalisa, intensity_scale.get()),**button_style)
+    Style1.grid(row=1, column=0, padx=50, pady=50)
+
+    style2 = tk.Button(f4, text="Starry Night", command=lambda: using_google_arbitary_image_stylization_model(starrynight, intensity_scale.get()),**button_style)
+    style2.grid(row=1, column=1, padx=50, pady=50)
+
+    style3 = tk.Button(f4, text="Scream", command=lambda: using_google_arbitary_image_stylization_model(scream, intensity_scale.get()),**button_style)
+    style3.grid(row=1, column=2, padx=50, pady=50)
+
+    # Optionally, you can add the fourth style button if needed
+    style4 = tk.Button(f4, text="Anime", command=lambda: using_google_arbitary_image_stylization_model(anime, intensity_scale.get()),**button_style)
+    style4.grid(row=1, column=3, padx=50, pady=50)
+
+
+
+def on_filter_intensity_change(val):
+
+    apply_emboss_filter(val)
+
+def embFilter(f4):
+    clear_frame4(f4)
+
+    # Reset grid configuration for f4
+    f4.grid_columnconfigure(0, weight=0)  # No expansion for the first column
+
+    # ----------- Emboss Filter Intensity Slider -----------
+    intensity_slider = tk.Scale(
+        f4,
+        from_=0,
+        to=5.0,
+        orient=tk.HORIZONTAL,
+        resolution=0.1,
+        label="Emboss Filter Intensity"
+    )
+    intensity_slider.set(0)
+    intensity_slider.grid(row=0, column=0, padx=50, pady=50, sticky='ew')  # Use grid layout
+    intensity_slider.config(command=on_filter_intensity_change, **slider_style)
+
+    # Reset row configuration to prevent stretching
+    f4.grid_rowconfigure(0, weight=0)  # First row (Intensity Slider) does not stretch
+
+
+
+def on_edge_threshold_change(val):
+    low_threshold = low_slider.get()
+    upper_threshold = upper_slider.get()
+    apply_edge_detection(low_threshold, upper_threshold)
+
+def edgeFilter(f4):
+    clear_frame4(f4)
+
+    global low_slider, upper_slider
+
+    # Reset grid configuration for f4
+    f4.grid_columnconfigure(0, weight=0)  # No expansion for the first column
+
+    # ----------- Low Threshold Slider -----------
+    low_slider = tk.Scale(
+        f4,
+        from_=0,
+        to=255,
+        orient=tk.HORIZONTAL,
+        resolution=1,
+        label="Low Threshold"
+    )
+    low_slider.set(0)
+    low_slider.grid(row=0, column=0, padx=50, pady=10, sticky='ew')  # Use grid layout
+    low_slider.config(**slider_style)
+    low_slider.config(command=on_edge_threshold_change)
+
+    # ----------- Upper Threshold Slider -----------
+    upper_slider = tk.Scale(
+        f4,
+        from_=0,
+        to=255,
+        orient=tk.HORIZONTAL,
+        resolution=1,
+        label="Upper Threshold"
+    )
+    upper_slider.set(0)
+    upper_slider.grid(row=1, column=0, padx=50, pady=10, sticky='ew')  # Use grid layout
+    upper_slider.config(**slider_style)
+    upper_slider.config(command=on_edge_threshold_change)
+
+    # Reset row configuration to prevent stretching
+    f4.grid_rowconfigure(0, weight=0)  # First row (Low Threshold) does not stretch
+    f4.grid_rowconfigure(1, weight=0)  # Second row (Upper Threshold) does not stretch
+
+
+def on_sharpening_intensity_change(val):
+
+    apply_image_sharpening(val)
+
+def sharpenFilter(f4):
+    clear_frame4(f4)
+
+    # Reset grid configuration for f4
+    f4.grid_columnconfigure(0, weight=1)
+
+    # ----------- Sharpening Intensity Slider -----------
+    intensity_slider = tk.Scale(f4, from_=0, to=5, orient=tk.HORIZONTAL, resolution=0.1, label="Sharpening Intensity")
+    intensity_slider.set(0)
+    intensity_slider.grid(row=0, column=0, padx=50, pady=50, sticky='nsew')  # Use grid layout
+
+    intensity_slider.config(command=on_sharpening_intensity_change, **slider_style)  # Apply shortened length from slider_style
+
+    # Avoid grid stretching the slider too much
+    f4.grid_columnconfigure(0, weight=0)  # Prevent grid from stretching the slider excessively
+
+
+
+def on_smoothing_change(val):
+
+    kernel_size = kernel_size_slider.get()
+    std_deviation = std_dev_slider.get()
+    apply_smoothing(kernel_size, std_deviation)
+
+def smoothingFilter(f4):
+    clear_frame4(f4)
+
+    global kernel_size_slider, std_dev_slider
+
+    # Reset grid configuration for f4
+    f4.grid_columnconfigure(0, weight=0)  # No expansion for the first column
+    f4.grid_columnconfigure(1, weight=0)  # No expansion for the second column
+
+    # ----------- Kernel Size Slider -----------
+    kernel_size_slider = tk.Scale(
+        f4,
+        from_=1,
+        to=31,
+        orient=tk.HORIZONTAL,
+        resolution=2,
+        label="Kernel Size"
+    )
+    kernel_size_slider.set(1)  # Set default value to 1
+    kernel_size_slider.grid(row=0, column=0, padx=50, pady=10, sticky='ew')  # Use grid layout
+
+    # ----------- Standard Deviation Slider -----------
+    std_dev_slider = tk.Scale(
+        f4,
+        from_=0,
+        to=10,
+        orient=tk.HORIZONTAL,
+        resolution=0.1,
+        label="Standard Deviation"
+    )
+    std_dev_slider.set(0)  # Set default value to 0
+    std_dev_slider.grid(row=1, column=0, padx=50, pady=10, sticky='ew')  # Use grid layout
+
+    # Configure sliders
+    kernel_size_slider.config(command=on_smoothing_change, **slider_style)
+    std_dev_slider.config(command=on_smoothing_change, **slider_style)
+
+    # Reset row configuration to prevent stretching
+    f4.grid_rowconfigure(0, weight=0)  # First row (Kernel Size) does not stretch
+    f4.grid_rowconfigure(1, weight=0)  # Second row (Standard Deviation) does not stretch
+
+

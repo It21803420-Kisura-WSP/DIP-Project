@@ -1,40 +1,53 @@
 import cv2
+from PIL import Image, ImageTk
 import numpy as np
+from src.util.fileUtil import get_resized_image
+import tkinter as tk
 
-def color_balance(image):
-    
-    img_float = image.astype(np.float32)
-    
-    
-    avg_b = np.mean(img_float[:, :, 0])  
-    avg_g = np.mean(img_float[:, :, 1])  
-    avg_r = np.mean(img_float[:, :, 2])  
+import cv2
+from PIL import Image, ImageTk
+import numpy as np
+from src.util.fileUtil import get_resized_image
 
-    
-    avg_global = (avg_b + avg_g + avg_r) / 3
+def color_correction(hue, saturation, value):
+    from src.gui.mainUI import get_EditedImgCanvas
+    EditedImgCanvas = get_EditedImgCanvas()
 
-   
-    scale_b = avg_global / avg_b
-    scale_g = avg_global / avg_g
-    scale_r = avg_global / avg_r
+    # Get the resized image
+    resized_img = get_resized_image()
+    if resized_img is None:
+        print("No image loaded")
+        return
 
- 
-    img_float[:, :, 0] = img_float[:, :, 0] * scale_b  
-    img_float[:, :, 1] = img_float[:, :, 1] * scale_g  
-    img_float[:, :, 2] = img_float[:, :, 2] * scale_r  
+    # Convert resized image to numpy array for manipulation
+    img_array = np.array(resized_img)
 
-   
-    img_balanced = np.clip(img_float, 0, 255).astype(np.uint8)
+    # Convert to HSV
+    hsv_img = cv2.cvtColor(img_array, cv2.COLOR_RGB2HSV)
 
-    return img_balanced
+    # Adjust Hue
+    hsv_img[..., 0] = (hsv_img[..., 0] + hue) % 180  # Wrap around using modulo
 
+    # Adjust Saturation
+    hsv_img[..., 1] = np.clip(hsv_img[..., 1] * saturation, 0, 255)
 
-image = cv2.imread('image.png')
+    # Adjust Value (Brightness)
+    hsv_img[..., 2] = np.clip(hsv_img[..., 2] * value, 0, 255)
 
-color_balance_image = color_balance(image)
+    # Convert back to RGB
+    corrected_img_array = cv2.cvtColor(hsv_img, cv2.COLOR_HSV2RGB)
 
+    # Convert the corrected image array back to a PIL Image
+    final_img = Image.fromarray(corrected_img_array.astype('uint8'))
 
-cv2.imwrite('color_balance_image.jpg', color_balance_image)
-cv2.imshow('color_balance Image', color_balance_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    # Clear the canvas before displaying the new image
+    for widget in EditedImgCanvas.winfo_children():
+        widget.destroy()
+
+    # Convert final image to ImageTk format for display in Tkinter
+    final_img_tk = ImageTk.PhotoImage(final_img)
+
+    # Display the image in the Tkinter canvas
+    img_label = tk.Label(EditedImgCanvas, image=final_img_tk)
+    img_label.image = final_img_tk  # Keep reference to avoid garbage collection
+    img_label.pack()
