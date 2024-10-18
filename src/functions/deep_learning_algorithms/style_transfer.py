@@ -1,9 +1,9 @@
 
-import tensorflow_hub as hub  # For loading the TensorFlow Hub model
-import tensorflow as tf  # For TensorFlow operations
-import numpy as np  # For NumPy array operations
-import cv2  # For OpenCV operations
-from PIL import Image, ImageTk  # For image processing and displaying in Tkinter
+import tensorflow_hub as hub  
+import tensorflow as tf  
+import numpy as np  
+import cv2  
+from PIL import Image, ImageTk  
 from src.util.fileUtil import get_resized_image
 import tkinter as tk
 

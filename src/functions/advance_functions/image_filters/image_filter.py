@@ -1,3 +1,4 @@
+"""
 import numpy as np 
 import matplotlib.pyplot as plt 
 from scipy import signal 
@@ -289,9 +290,10 @@ def high_pass_butterworth_filter_color_image(image_path, sampling_freq, pass_ban
 
 # Test the function
 image_path = "image.png"  
-sampling_freq = 4000  # This is ignored in the context of image processing
-pass_band = 30  # Set a cutoff frequency for high-pass filtering
-stop_band = 10  # Stopband frequency (not directly used in this example)
-band_ripple = 0.5  # Passband ripple (not directly used in this example)
+sampling_freq = 4000  
+pass_band = 30  
+stop_band = 10  
+band_ripple = 0.5  
 
 high_pass_butterworth_filter_color_image(image_path, sampling_freq, pass_band, stop_band, band_ripple)
+"""

@@ -17,8 +17,6 @@ borderC = 'white'
 def createUI(root):
     root.configure(bg=primaryC)
 
-    
-    
     # Grid setup
     global f3
     f1 = tk.LabelFrame(root, bg=primaryC, bd=0)
@@ -48,7 +46,7 @@ def createUI(root):
         'fg': btnF,
         'activebackground': btnA,
         'font': ('Arial', 8),
-        'relief': 'flat',  # Use flat to avoid borders
+        'relief': 'flat',  
         'borderwidth': 0,
         'highlightthickness': 0,
         'width': 20,
@@ -68,14 +66,14 @@ def createUI(root):
     f3.grid_columnconfigure(0, weight=1)
 
     # Set rows to weight to distribute space evenly
-    for i in range(18):  # 18 rows for buttons and labels
+    for i in range(18):  
         f1.grid_rowconfigure(i, weight=1)
 
     # Define a function for button placement with consistent padding
     def place_button(row, text, command):
         btn = tk.Button(f1, text=text, **button_style, command=command)
-        btn.grid(row=row, column=0, sticky='ew', pady=5, padx=(10, 10))  # Add horizontal padding
-        f1.grid_columnconfigure(0, weight=1)  # Make the column stretch
+        btn.grid(row=row, column=0, sticky='ew', pady=5, padx=(10, 10))  
+        f1.grid_columnconfigure(0, weight=1)  
 
     uploadBtn = place_button(0, 'Upload an image', lambda: upload_image(mainCanvas))
 

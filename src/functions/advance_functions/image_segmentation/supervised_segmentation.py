@@ -27,8 +27,8 @@ def chan_vese_segmentation(max_iterations):
     print(f"Chan-Vese Result: {chanvese_result}")
 
     # Combine the segmented images for display
-    segmented_image = chanvese_result[0]  # Segmented image
-    final_level_set = chanvese_result[1]  # Final level set
+    segmented_image = chanvese_result[0]  
+    final_level_set = chanvese_result[1]  
     
     # Create a mask for the segmented image
     mask = segmented_image > 0
@@ -40,7 +40,7 @@ def chan_vese_segmentation(max_iterations):
     print(f"Combined Image Shape: {combined_image.shape}, dtype: {combined_image.dtype}")
 
     # Convert combined image to PIL Image and then to ImageTk for Tkinter
-    combined_image_pil = Image.fromarray((combined_image * 255).astype(np.uint8))  # Scale to 0-255
+    combined_image_pil = Image.fromarray((combined_image * 255).astype(np.uint8))  
     final_img = ImageTk.PhotoImage(combined_image_pil)
 
     # Clear the canvas before displaying the new image
@@ -50,7 +50,7 @@ def chan_vese_segmentation(max_iterations):
 
     # Display the image in the Tkinter canvas
     img_label = tk.Label(EditedImgCanvas, image=final_img)
-    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.image = final_img  
     img_label.pack()
 
 
@@ -82,7 +82,7 @@ from PIL import Image, ImageTk
 def normalize_image(image):
     # Normalize pixel values to range 0-255
     normalized_image = (image - np.min(image)) / (np.max(image) - np.min(image)) * 255
-    return normalized_image.astype(np.uint8)  # Convert to uint8 for image processing
+    return normalized_image.astype(np.uint8)  
 
 def threshold_using_skiimage_filter(otsu_threshold, niblack_threshold, sauvola_threshold):
     from src.gui.mainUI import get_EditedImgCanvas
@@ -101,7 +101,7 @@ def threshold_using_skiimage_filter(otsu_threshold, niblack_threshold, sauvola_t
     # Otsu Thresholding
     if otsu_threshold == 0:
         otsu_threshold = filters.threshold_otsu(normalized_gray_image)
-    binarized_image_otsu = (normalized_gray_image > otsu_threshold).astype(np.uint8) * 255  # Convert to 0-255
+    binarized_image_otsu = (normalized_gray_image > otsu_threshold).astype(np.uint8) * 255  
 
     # Niblack Thresholding
     if niblack_threshold == 0:
@@ -126,5 +126,5 @@ def threshold_using_skiimage_filter(otsu_threshold, niblack_threshold, sauvola_t
 
     # Display the image in the Tkinter canvas
     img_label = tk.Label(EditedImgCanvas, image=final_img)
-    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.image = final_img  
     img_label.pack()

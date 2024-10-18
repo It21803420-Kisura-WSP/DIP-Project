@@ -85,7 +85,7 @@ def convert_image_to_grayscale(intensity):
     gray_image = cv.cvtColor(resized_img, cv.COLOR_BGR2GRAY)
     
     # Adjust intensity by multiplying pixel values with the intensity factor
-    intensity = float(intensity) / 100  # Normalize intensity between 0 and 1
+    intensity = float(intensity) / 100  
     gray_image = cv.convertScaleAbs(gray_image, alpha=intensity)
     
     finalImg = Image.fromarray(gray_image)

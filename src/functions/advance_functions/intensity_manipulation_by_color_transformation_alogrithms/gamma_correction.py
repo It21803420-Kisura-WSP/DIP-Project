@@ -55,5 +55,5 @@ def apply_gamma_correction(gamma_value):
         widget.destroy()
 
     img_label = tk.Label(EditedImgCanvas, image=final_img)
-    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.image = final_img  
     img_label.pack()

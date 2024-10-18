@@ -62,7 +62,7 @@ def enhance_brightness(brightness_value):
 
     # Display the enhanced image
     img_label = tk.Label(EditedImgCanvas, image=final_img)
-    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.image = final_img 
     img_label.pack()
 
 
@@ -72,6 +72,6 @@ def get_current_brightness():
     """
     Get the average brightness level of the image.
     """
-    grayscale_img = cv.cvtColor(resized_img, cv.COLOR_BGR2GRAY)  # Convert to grayscale
-    avg_brightness = np.mean(grayscale_img) / 255  # Normalize brightness value to [0, 1]
+    grayscale_img = cv.cvtColor(resized_img, cv.COLOR_BGR2GRAY)  
+    avg_brightness = np.mean(grayscale_img) / 255  
     return avg_brightness

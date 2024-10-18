@@ -16,7 +16,7 @@ def apply_smoothing(kernel_size, std_deviation):
     # Convert kernel size to odd integers to maintain Gaussian properties
     kernel_size = int(kernel_size)
     if kernel_size % 2 == 0:
-        kernel_size += 1  # Make it odd if it is even
+        kernel_size += 1  
 
     # Apply Gaussian Blur
     smoothed_image = cv.GaussianBlur(resized_img, (kernel_size, kernel_size), std_deviation)

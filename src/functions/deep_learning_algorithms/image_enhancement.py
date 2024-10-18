@@ -128,7 +128,7 @@ def reducing_noise(intensity):
         return
 
     # Apply fast non-local means denoising with intensity control
-    h = intensity  # Use the slider value directly for noise reduction
+    h = intensity  
     dst = cv2.fastNlMeansDenoisingColored(np.array(resized_img), None, h, 7, 21)
 
     # Convert to RGB for Tkinter
@@ -153,7 +153,7 @@ def reducing_noise_colored(intensity):
         return
 
     # Adjust noise reduction intensity for both color and luminance
-    h = intensity  # Use the slider value directly for color noise reduction
+    h = intensity  
     dst = cv2.fastNlMeansDenoisingColored(np.array(resized_img), None, h, h, 7, 21)
 
     # Convert to RGB for Tkinter
@@ -178,7 +178,7 @@ def sharpening_image(intensity):
         return
 
     # Create a sharpening kernel adjusted by intensity
-    intensity_value = max(intensity, 1)  # Ensure minimum sharpening effect
+    intensity_value = max(intensity, 1)  
     kernel = np.array([[0, -1, 0], [-1, 5 + intensity_value, -1], [0, -1, 0]])
 
     # Apply sharpening

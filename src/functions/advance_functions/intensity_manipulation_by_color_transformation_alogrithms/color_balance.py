@@ -26,7 +26,7 @@ def color_correction(hue, saturation, value):
     hsv_img = cv2.cvtColor(img_array, cv2.COLOR_RGB2HSV)
 
     # Adjust Hue
-    hsv_img[..., 0] = (hsv_img[..., 0] + hue) % 180  # Wrap around using modulo
+    hsv_img[..., 0] = (hsv_img[..., 0] + hue) % 180  
 
     # Adjust Saturation
     hsv_img[..., 1] = np.clip(hsv_img[..., 1] * saturation, 0, 255)
@@ -49,5 +49,5 @@ def color_correction(hue, saturation, value):
 
     # Display the image in the Tkinter canvas
     img_label = tk.Label(EditedImgCanvas, image=final_img_tk)
-    img_label.image = final_img_tk  # Keep reference to avoid garbage collection
+    img_label.image = final_img_tk  
     img_label.pack()

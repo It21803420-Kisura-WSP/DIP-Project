@@ -28,7 +28,7 @@ def vertical_flip():
 
     # Display the flipped image in the Tkinter canvas
     img_label = tk.Label(EditedImgCanvas, image=finalImg)
-    img_label.image = finalImg  # Keep a reference to avoid garbage collection
+    img_label.image = finalImg 
     img_label.pack()
 
 
@@ -57,5 +57,5 @@ def horizontal_flip():
 
     # Display the flipped image in the Tkinter canvas
     img_label = tk.Label(EditedImgCanvas, image=finalImg)
-    img_label.image = finalImg  # Keep a reference to avoid garbage collection
+    img_label.image = finalImg  
     img_label.pack()

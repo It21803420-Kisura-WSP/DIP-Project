@@ -30,5 +30,5 @@ def crop(startx, endx, starty, endy):
 
     # Display the cropped image in the Tkinter canvas
     img_label = tk.Label(EditedImgCanvas, image=finalImg)
-    img_label.image = finalImg  # Keep a reference to avoid garbage collection
+    img_label.image = finalImg  
     img_label.pack()

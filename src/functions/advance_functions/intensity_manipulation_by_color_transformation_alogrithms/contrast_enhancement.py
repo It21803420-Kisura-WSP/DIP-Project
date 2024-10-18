@@ -59,5 +59,5 @@ def enhance_contrast(contrast_value):
         widget.destroy()
 
     img_label = tk.Label(EditedImgCanvas, image=final_img)
-    img_label.image = final_img  # Keep a reference to avoid garbage collection
+    img_label.image = final_img  
     img_label.pack()

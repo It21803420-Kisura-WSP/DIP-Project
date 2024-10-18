@@ -25,7 +25,7 @@ def apply_image_sharpening(intensity):
     sharpened_image = cv.filter2D(resized_img, -1, sharpening_kernel)
 
     # Blend the original image and the sharpened image
-    alpha = 0.5  # Adjust this to change the blending amount
+    alpha = 0.5  
     blended_image = cv.addWeighted(resized_img, 1 - alpha, sharpened_image, alpha, 0)
 
     # Convert to RGB for Tkinter

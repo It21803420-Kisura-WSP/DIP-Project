@@ -46,7 +46,7 @@ def apply_emboss_filter(intensity):
         print("No image loaded")
         return
     
-    intensity = float(intensity)  # Convert slider value to a float
+    intensity = float(intensity)  
     
     if intensity == 0:
         # Show original image if intensity is 0

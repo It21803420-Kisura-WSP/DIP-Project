@@ -1,6 +1,4 @@
 # un-supervised segmentation algorithms
-
-# Global Imports
 from skimage.segmentation import slic, mark_boundaries, felzenszwalb
 import tkinter as tk
 from PIL import Image, ImageTk
@@ -9,8 +7,6 @@ import matplotlib.pyplot as plt
 from skimage.color import label2rgb
 import cv2
 from src.util.fileUtil import get_resized_image
-
-
 import cv2 as cv
 import numpy as np
 import tkinter as tk
@@ -18,7 +14,6 @@ from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
 from skimage.segmentation import felzenszwalb, mark_boundaries
 from src.util.fileUtil import get_resized_image
-
 import cv2 as cv
 import numpy as np
 import tkinter as tk
@@ -49,19 +44,14 @@ def felzenszwalbs(scale_slider, sigma_slider, min_size_slider):
     sigma = sigma_slider.get()
     min_size = min_size_slider.get()
 
-    # Computing Felzenszwalb's segmentation with slider values
     image_segments = felzenszwalb(image_array, scale=scale, sigma=sigma, min_size=min_size)
-
-    # Marking the boundaries of the segmentation
+    
     segmented_image_with_boundaries = mark_boundaries(image_array, image_segments)
-
-    # Convert the image to uint8 format for displaying in Tkinter
+    
     segmented_image_with_boundaries = (segmented_image_with_boundaries * 255).astype(np.uint8)
-
-    # Convert the image to RGB format for Pillow
+    
     segmented_image_rgb = cv.cvtColor(segmented_image_with_boundaries, cv.COLOR_BGR2RGB)
-
-    # Convert the image to a format compatible with Tkinter
+    
     final_img = ImageTk.PhotoImage(Image.fromarray(segmented_image_rgb))
 
     # Clear the canvas before displaying the new image
@@ -70,7 +60,7 @@ def felzenszwalbs(scale_slider, sigma_slider, min_size_slider):
 
     # Display the image in the Tkinter canvas
     img_label = tk.Label(EditedImgCanvas, image=final_img)
-    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.image = final_img  
     img_label.pack()
 
 
@@ -112,5 +102,5 @@ def mark_boundaries_on_canvas(n_segments, compactness):
 
     # Display the image in the Tkinter canvas
     img_label = tk.Label(EditedImgCanvas, image=final_img)
-    img_label.image = final_img  # Keep reference to avoid garbage collection
+    img_label.image = final_img  
     img_label.pack()
