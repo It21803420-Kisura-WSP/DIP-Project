@@ -8,7 +8,6 @@ def apply_emboss_filter(intensity):
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
     
-    # Get the resized image
     resized_img = get_resized_image()
     if resized_img is None:
         print("No image loaded")
@@ -17,7 +16,6 @@ def apply_emboss_filter(intensity):
     intensity = float(intensity)  
     
     if intensity == 0:
-        # Show original image if intensity is 0
         original_img = cv.cvtColor(resized_img, cv.COLOR_BGR2RGB)
         finalImg = Image.fromarray(original_img)
         finalfinalImg = ImageTk.PhotoImage(finalImg)
@@ -27,8 +25,7 @@ def apply_emboss_filter(intensity):
         img_label.image = finalfinalImg
         img_label.pack()
         return
-    
-    # Adjust embossing kernel based on intensity value
+
     embossing_kernel = np.array([[ -2 * intensity, -1 * intensity, 0],
                                  [ -1 * intensity,  1, 1 * intensity],
                                  [  0,  1 * intensity, 2 * intensity]])

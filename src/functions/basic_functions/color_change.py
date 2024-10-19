@@ -4,7 +4,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from src.util.fileUtil import get_resized_image
 
-# Function to convert image to grayscale with intensity control
+
 def convert_image_to_grayscale(intensity):
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
@@ -16,7 +16,7 @@ def convert_image_to_grayscale(intensity):
 
     gray_image = cv.cvtColor(resized_img, cv.COLOR_BGR2GRAY)
     
-    # Adjust intensity by multiplying pixel values with the intensity factor
+    
     intensity = float(intensity) / 100  
     gray_image = cv.convertScaleAbs(gray_image, alpha=intensity)
     
@@ -30,7 +30,7 @@ def convert_image_to_grayscale(intensity):
     img_label.image = finalfinalImg
     img_label.pack()
 
-# Function to convert image to black-and-white with intensity control
+
 def convert_image_to_bw(intensity):
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
@@ -42,7 +42,7 @@ def convert_image_to_bw(intensity):
     
     black_n_white_image = cv.cvtColor(resized_img, cv.COLOR_BGR2GRAY)
     
-    # Adjust the threshold based on the intensity level
+    
     threshold_value = int(intensity)
     (_, black_n_white_image) = cv.threshold(black_n_white_image, threshold_value, 255, cv.THRESH_BINARY)
     
@@ -56,7 +56,7 @@ def convert_image_to_bw(intensity):
     img_label.image = finalfinalImg
     img_label.pack()
 
-# Function to display the color image (no intensity control for color)
+
 def convert_image_to_color():
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()

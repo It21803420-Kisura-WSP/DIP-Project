@@ -1,4 +1,3 @@
-# un-supervised segmentation algorithms
 from skimage.segmentation import slic, mark_boundaries, felzenszwalb
 import tkinter as tk
 from PIL import Image, ImageTk
@@ -31,7 +30,6 @@ def felzenszwalbs(scale_slider, sigma_slider, min_size_slider):
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
 
-    # Get the resized image
     resized_img = get_resized_image()
     if resized_img is None:
         print("No image loaded")
@@ -39,7 +37,6 @@ def felzenszwalbs(scale_slider, sigma_slider, min_size_slider):
 
     image_array = np.array(resized_img)
 
-    # Getting values from sliders
     scale = scale_slider.get()
     sigma = sigma_slider.get()
     min_size = min_size_slider.get()
@@ -54,11 +51,11 @@ def felzenszwalbs(scale_slider, sigma_slider, min_size_slider):
     
     final_img = ImageTk.PhotoImage(Image.fromarray(segmented_image_rgb))
 
-    # Clear the canvas before displaying the new image
+
     for widget in EditedImgCanvas.winfo_children():
         widget.destroy()
 
-    # Display the image in the Tkinter canvas
+
     img_label = tk.Label(EditedImgCanvas, image=final_img)
     img_label.image = final_img  
     img_label.pack()
@@ -72,35 +69,35 @@ def mark_boundaries_on_canvas(n_segments, compactness):
 
     EditedImgCanvas = get_EditedImgCanvas()
 
-    # Get the resized image
+
     resized_img = get_resized_image()
     if resized_img is None:
         print("No image loaded")
         return
 
-    # Convert image to a NumPy array for segmentation
+    
     image_array = np.array(resized_img)
 
-    # Apply SLIC segmentation with passed arguments
+    
     image_segments = slic(image_array, n_segments=n_segments, compactness=compactness)
 
-    # Mark the boundaries of the segmentation
+    
     image_with_boundaries = mark_boundaries(image_array, image_segments)
 
-    # Convert to uint8 format for Tkinter display
+    
     image_with_boundaries = (image_with_boundaries * 255).astype(np.uint8)
 
-    # Convert to RGB format for Pillow
+    
     image_rgb = cv.cvtColor(image_with_boundaries, cv.COLOR_BGR2RGB)
 
-    # Convert the image to a format compatible with Tkinter
+    
     final_img = ImageTk.PhotoImage(Image.fromarray(image_rgb))
 
-    # Clear the canvas before displaying the new image
+    
     for widget in EditedImgCanvas.winfo_children():
         widget.destroy()
 
-    # Display the image in the Tkinter canvas
+    
     img_label = tk.Label(EditedImgCanvas, image=final_img)
     img_label.image = final_img  
     img_label.pack()

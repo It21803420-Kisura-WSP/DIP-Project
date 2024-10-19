@@ -11,28 +11,27 @@ def enhance_brightness(brightness_value):
     from src.gui.mainUI import get_EditedImgCanvas
     EditedImgCanvas = get_EditedImgCanvas()
 
-    # Load the resized image
     resized_img = get_resized_image()
     if resized_img is None:
         print("No image loaded")
         return
 
-    # Convert to RGB format for PIL
+
     resized_img_rgb = cv.cvtColor(resized_img, cv.COLOR_BGR2RGB)
     pil_image = Image.fromarray(resized_img_rgb.astype('uint8'))
 
-    # Enhance the brightness
+    
     brightness_enhancer = ImageEnhance.Brightness(pil_image)
     enhanced_image = brightness_enhancer.enhance(brightness_value)
 
-    # Convert the PIL image to a format compatible with Tkinter
+    
     final_img = ImageTk.PhotoImage(enhanced_image)
 
-    # Clear the canvas
+    
     for widget in EditedImgCanvas.winfo_children():
         widget.destroy()
 
-    # Display the enhanced image
+    
     img_label = tk.Label(EditedImgCanvas, image=final_img)
     img_label.image = final_img 
     img_label.pack()
