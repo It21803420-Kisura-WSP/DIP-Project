@@ -1,4 +1,3 @@
-
 import tensorflow_hub as hub  
 import tensorflow as tf  
 import numpy as np  
@@ -12,7 +11,6 @@ model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v
 def using_google_arbitary_image_stylization_model(style: str, intensity: float):
     from src.gui.mainUI import get_EditedImgCanvas
 
-    
     def load_image(img_path):
         try:
             img = tf.io.read_file(img_path)
@@ -30,29 +28,53 @@ def using_google_arbitary_image_stylization_model(style: str, intensity: float):
         print("No image loaded")
         return
 
+    
     if isinstance(resized_img, np.ndarray):
-        content_image = tf.convert_to_tensor(resized_img, dtype=tf.float32)
-        content_image = content_image[tf.newaxis, :]
+        content_image = tf.convert_to_tensor(resized_img, dtype=tf.float32) / 255.0
+        content_height, content_width, _ = content_image.shape
+        content_image = content_image[tf.newaxis, :]  
     else:
         content_image = load_image(resized_img)
+        if content_image is not None:
+            content_height, content_width = content_image.shape[1], content_image.shape[2]
+        else:
+            print("Failed to load the content image")
+            return
 
+    
     style_image = load_image(style)
-
-    
-    stylized_image = model(tf.constant(content_image), tf.constant(style_image))[0] * intensity
-
-    
-    styled_image_rgb = cv2.cvtColor(np.squeeze(stylized_image) * 255, cv2.COLOR_BGR2RGB)
+    if style_image is None:
+        print("Failed to load style image")
+        return
 
    
-    final_img = ImageTk.PhotoImage(Image.fromarray(styled_image_rgb.astype(np.uint8)))
+    style_image_resized = tf.image.resize(style_image, (content_height, content_width))
 
+    
+    outputs = model(tf.constant(content_image), tf.constant(style_image_resized))
+    stylized_image = outputs[0]
+
+    
+    stylized_image = tf.image.resize(stylized_image, (content_height, content_width))
+
+    
+    stylized_image = (1 - intensity) * content_image + intensity * stylized_image
+
+
+    styled_image_rgb = np.squeeze(stylized_image.numpy()) * 255.0
+    styled_image_rgb = styled_image_rgb.astype(np.uint8)
+
+    
+    final_img = ImageTk.PhotoImage(Image.fromarray(styled_image_rgb))
+
+    
     EditedImgCanvas = get_EditedImgCanvas()
 
-   
+    
     for widget in EditedImgCanvas.winfo_children():
         widget.destroy()
 
+   
     img_label = tk.Label(EditedImgCanvas, image=final_img)
-    img_label.image = final_img
+    img_label.image = final_img  
     img_label.pack()
