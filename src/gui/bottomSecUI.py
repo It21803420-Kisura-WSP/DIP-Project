@@ -353,19 +353,19 @@ def intensityManipulation(f4):
     f4.grid_columnconfigure(2, weight=1)
 
     # ----------- Brightness Slider -----------
-    brightness_slider = tk.Scale(f4, from_=0.5, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Brightness")
+    brightness_slider = tk.Scale(f4, from_=0, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Brightness")
     brightness_slider.set(0)
     brightness_slider.grid(row=0, column=0, padx=50, pady=50, sticky='nsew')
     brightness_slider.config(command=on_brightness_change, **slider_style)
 
     # ----------- Contrast Slider -----------
-    contrast_slider = tk.Scale(f4, from_=0.5, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Contrast")
+    contrast_slider = tk.Scale(f4, from_=0, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Contrast")
     contrast_slider.set(0)
     contrast_slider.grid(row=0, column=1, padx=50, pady=50, sticky='nsew')
     contrast_slider.config(command=on_contrast_change, **slider_style)
 
     # ----------- Gamma Slider -----------
-    gamma_slider = tk.Scale(f4, from_=0.1, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Gamma")
+    gamma_slider = tk.Scale(f4, from_=0, to=3.0, orient=tk.HORIZONTAL, resolution=0.1, label="Gamma")
     gamma_slider.set(0)  # Set default gamma value
     gamma_slider.grid(row=0, column=2, padx=50, pady=50, sticky='nsew')
     gamma_slider.config(command=on_gamma_change, **slider_style)
