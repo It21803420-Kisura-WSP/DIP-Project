@@ -1,6 +1,8 @@
 import tkinter as tk
 from src.gui.mainUI import createUI
 
+# D.I.M.A - Digital Image Manipulation App
+
 def main():
     root = tk.Tk()
 
@@ -10,10 +12,8 @@ def main():
     window_width = screen_width - 200 
     window_height = screen_height - 150 
 
-
     x = 100 
     y = 50
-
 
     root.geometry(f"{window_width}x{window_height}+{x}+{y}")
     root.title("Digital Image Manipulation App")
