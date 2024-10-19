@@ -7,3 +7,4 @@
 [Image Enhancement](https://medium.com/image-processing-with-python/image-enhancement-with-python-d3040a39e394) </br>
 [Style Transfer Tensorflow](https://www.geeksforgeeks.org/neural-style-transfer-with-tensorflow/) </br>
 [Style Transfer Pytorch](https://pytorch.org/tutorials/advanced/neural_style_tutorial.html) </br>
+[Style Transfer Algorithm Source](https://www.youtube.com/watch?v=bFeltWvzZpQ&embeds_referring_euri=https%3A%2F%2Fwww.bing.com%2F&embeds_referring_origin=https%3A%2F%2Fwww.bing.com&source_ve_path=MjM4NTE) <br/>
