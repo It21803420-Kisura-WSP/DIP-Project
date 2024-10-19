@@ -17,14 +17,12 @@ borderC = 'white'
 def createUI(root):
     root.configure(bg=primaryC)
 
-    # Grid setup
     global f3
     f1 = tk.LabelFrame(root, bg=primaryC, bd=0)
     f2 = tk.LabelFrame(root, bg=primaryC, bd=0, highlightthickness=1, relief='solid', highlightbackground= borderC)
     f3 = tk.LabelFrame(root, bg=primaryC, bd=0, highlightthickness=1, relief='solid', highlightbackground= borderC)
     f4 = tk.LabelFrame(root, bg=primaryC, bd=0, highlightthickness=1, relief='solid', highlightbackground= borderC)
 
-    # Allow frames to resize
     f1.grid_propagate(False)
     f2.grid_propagate(False)
     f3.grid_propagate(False)
@@ -53,7 +51,6 @@ def createUI(root):
         'height': 2
     }
 
-    # Main canvas setup
     mainCanvas = tk.Canvas(f2, bg=primaryC, height=600, width=600, highlightthickness=0)
     mainCanvas.grid(row=0, column=0, sticky='nsew')
     f2.grid_rowconfigure(0, weight=1)
@@ -65,11 +62,9 @@ def createUI(root):
     f3.grid_rowconfigure(0, weight=1)
     f3.grid_columnconfigure(0, weight=1)
 
-    # Set rows to weight to distribute space evenly
     for i in range(18):  
         f1.grid_rowconfigure(i, weight=1)
 
-    # Define a function for button placement with consistent padding
     def place_button(row, text, command):
         btn = tk.Button(f1, text=text, **button_style, command=command)
         btn.grid(row=row, column=0, sticky='ew', pady=5, padx=(10, 10))  
