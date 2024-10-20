@@ -3,21 +3,23 @@ import cv2
 import numpy as np
 import tkinter as tk
 from PIL import Image, ImageTk
+import kagglehub
 import tensorflow as tf
-from tensorflow import keras
+from keras.layers import TFSMLayer  # Ensure you import TFSMLayer from keras
 from src.util.fileUtil import get_resized_image
-from kagglehub import model_download
+
 
 # Step 1: Add model path verification, model loading, and signature check
 def load_denoising_model(model_path):
     try:
-        # Load the model from TensorFlow Hub
-        model = tf.keras.models.load_model(model_path, compile=False)
+        # Use the correct endpoint
+        model = TFSMLayer(model_path, call_endpoint='serving_default')
         print("Model loaded successfully from:", model_path)
         return model
     except Exception as e:
         print(f"Failed to load model from {model_path}: {e}")
         return None
+
 
 # Function to reduce noise in the image using ML
 def reducing_noise(model):
@@ -34,12 +36,29 @@ def reducing_noise(model):
     input_image = input_image.astype('float32') / 255.0  # Normalize
     input_image = np.expand_dims(input_image, axis=0)  # Add batch dimension
 
-    # Call the model with the input image
+    # Get the model's default serving signature
+    serving_fn = model.signatures['serving_default']
+
+    # Get the input tensor names from the signature dynamically
+    input_keys = list(serving_fn.structured_input_signature[1].keys())
+
+    # Create the input dictionary based on the expected keys
+    if len(input_keys) >= 2:
+        input_dict = {
+            input_keys[0]: input_image,
+            input_keys[1]: input_image,  # Adjust if the placeholders require different data
+        }
+    else:
+        print("Unexpected number of inputs in the model signature")
+        return
+
+    # Call the model with the input dictionary
     try:
-        output = model(input_image)
-        denoised_image = output.numpy()
-    except Exception as e:
-        print("Error during model inference:", e)
+        output = serving_fn(**input_dict)  # Ensure you're using named arguments
+        output_key = list(output.keys())[0]  # Get the output key dynamically
+        denoised_image = output[output_key].numpy()  # Access output using the dynamic key
+    except TypeError as e:
+        print("TypeError:", e)
         return
 
     # Squeeze the image and prepare it for display
@@ -56,12 +75,12 @@ def reducing_noise(model):
     img_label.image = final_img
     img_label.pack()
 
-# Download the model using kagglehub
-model_path = model_download("kaggle/maxim/tensorFlow2/s-3-denoising-sidd")
-print("Path to model files:", model_path)
 
-# Load the denoising model
-model = load_denoising_model(model_path)
+# Download and load the denoising model using kagglehub
+path = kagglehub.model_download("kaggle/maxim/tensorFlow2/s-3-denoising-sidd")
+print("Path to model files:", path)
+
+model = load_denoising_model(path)
 
 noise_reduction_intensity = 5  # Adjust as needed (0-10)
 
