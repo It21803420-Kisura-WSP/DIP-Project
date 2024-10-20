@@ -439,43 +439,6 @@ def on_sharpening_intensity_change(val):
     sharpening_image(int(float(val)))
 
 
-
-def imageEnhancements(f4):
-    clear_frame4(f4)
-
-    
-    noiseSlider = tk.Scale(f4, from_=0, to=10, orient=tk.HORIZONTAL, resolution=1, label="Noise Reduction Intensity",**slider_style)
-    noiseSlider.set(0)  
-    noiseSlider.grid(row=0, column=0, padx=20, pady=20)
-    
-    colorNoiseSlider = tk.Scale(f4, from_=0, to=10, orient=tk.HORIZONTAL, resolution=1, label="ColorNoise Reduction Intensity",**slider_style)
-    colorNoiseSlider.set(0)  
-    colorNoiseSlider.grid(row=0, column=1, padx=20, pady=20)
-    
-    sharpenSlider = tk.Scale(f4, from_=1, to=10, orient=tk.HORIZONTAL, resolution=1, label="Sharpening Intensity",**slider_style)
-    sharpenSlider.set(0)  
-    sharpenSlider.grid(row=0, column=2, padx=20, pady=20)
-
-    
-    noise_button = tk.Button(f4, text="Apply", 
-                             command=lambda: reducing_noise(int(noiseSlider.get())),**button_style)
-    noise_button.grid(row=1, column=0, padx=20, pady=20)
-
-    color_noise_button = tk.Button(f4, text="Apply", 
-                                   command=lambda: reducing_noise_colored(int(colorNoiseSlider.get())),**button_style)
-    color_noise_button.grid(row=1, column=1, padx=20, pady=20)
-
-    sharpen_button = tk.Button(f4, text="Apply", 
-                               command=lambda: sharpening_image(int(sharpenSlider.get())),**button_style)
-    sharpen_button.grid(row=1, column=2, padx=20, pady=20)
-
-    
-    f4.grid_columnconfigure(0, minsize=150)
-    f4.grid_columnconfigure(1, minsize=150)
-    f4.grid_columnconfigure(2, minsize=150)
-
-
-
 def styleTran(f4):
     clear_frame4(f4)
 
@@ -646,3 +609,62 @@ def smoothingFilter(f4):
     
     f4.grid_rowconfigure(0, weight=0)  
     f4.grid_rowconfigure(1, weight=0)  
+    
+
+
+# def imageEnhancements(f4):
+#     clear_frame4(f4)
+
+    
+#     noiseSlider = tk.Scale(f4, from_=0, to=10, orient=tk.HORIZONTAL, resolution=1, label="Noise Reduction Intensity",**slider_style)
+#     noiseSlider.set(0)  
+#     noiseSlider.grid(row=0, column=0, padx=20, pady=20)
+    
+#     colorNoiseSlider = tk.Scale(f4, from_=0, to=10, orient=tk.HORIZONTAL, resolution=1, label="ColorNoise Reduction Intensity",**slider_style)
+#     colorNoiseSlider.set(0)  
+#     colorNoiseSlider.grid(row=0, column=1, padx=20, pady=20)
+    
+#     sharpenSlider = tk.Scale(f4, from_=1, to=10, orient=tk.HORIZONTAL, resolution=1, label="Sharpening Intensity",**slider_style)
+#     sharpenSlider.set(0)  
+#     sharpenSlider.grid(row=0, column=2, padx=20, pady=20)
+
+#     from src.gui.mainUI import get_EditedImgCanvas
+#     # Assuming you have the EditedImgCanvas already defined or available
+#     EditedImgCanvas = get_EditedImgCanvas()
+
+#     noise_button = tk.Button(f4, text="Apply", 
+#                          command=lambda: reducing_noise(model, int(noiseSlider.get()), EditedImgCanvas), 
+#                          **button_style)
+#     noise_button.grid(row=1, column=0, padx=20, pady=20)
+
+#     color_noise_button = tk.Button(f4, text="Apply", 
+#                                    command=lambda: reducing_noise_colored(int(colorNoiseSlider.get())),**button_style)
+#     color_noise_button.grid(row=1, column=1, padx=20, pady=20)
+
+#     sharpen_button = tk.Button(f4, text="Apply", 
+#                                command=lambda: sharpening_image(int(sharpenSlider.get())),**button_style)
+#     sharpen_button.grid(row=1, column=2, padx=20, pady=20)
+
+    
+#     f4.grid_columnconfigure(0, minsize=150)
+#     f4.grid_columnconfigure(1, minsize=150)
+#     f4.grid_columnconfigure(2, minsize=150)
+
+def imageEnhancements_noSliders(f4):
+    clear_frame4(f4)
+
+    # Button creation helper
+    def create_button(text, command, row, col):
+        button = tk.Button(f4, text=text, command=command, **button_style)
+        button.grid(row=row, column=col, padx=20, pady=20)
+
+    # Create Buttons for each enhancement
+    create_button("Apply", 
+                  lambda: reducing_noise(model), 
+                  0, 0)
+
+    # Grid Configuration
+    for col in range(3):
+        f4.grid_columnconfigure(col, minsize=150)
+
+

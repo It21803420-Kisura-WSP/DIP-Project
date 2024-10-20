@@ -5,6 +5,8 @@ import cv2
 from PIL import Image, ImageTk  
 from src.util.fileUtil import get_resized_image
 import tkinter as tk
+from tensorflow import keras
+
 
 model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
 

@@ -1,8 +1,6 @@
 import tkinter as tk
 from src.gui.mainUI import createUI
 
-# D.I.M.A - Digital Image Manipulation App
-
 def main():
     root = tk.Tk()
 

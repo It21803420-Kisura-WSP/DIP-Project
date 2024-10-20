@@ -102,7 +102,7 @@ def createUI(root):
     l4.grid(row=14, column=0, sticky='nsew', pady=5)
 
     place_button(15, 'Image Segmentation', lambda: imgSegView(f4))
-    place_button(16, 'Image Enhancement', lambda: imageEnhancements(f4))
+    place_button(16, 'Image Enhancement', lambda: imageEnhancements_noSliders(f4))
     place_button(17, 'Style Transfer', lambda: styleTran(f4))
 
 def get_f3():
