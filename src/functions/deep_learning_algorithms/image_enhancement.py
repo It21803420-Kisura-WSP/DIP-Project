@@ -5,7 +5,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import kagglehub
 import tensorflow as tf
-from keras.layers import TFSMLayer  # Ensure you import TFSMLayer from keras
+from keras.layers import TFSMLayer  
 from src.util.fileUtil import get_resized_image
 
 
